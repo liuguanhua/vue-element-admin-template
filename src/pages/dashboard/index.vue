@@ -13,10 +13,10 @@ export default defineComponent({
     return () => {
       return (
         <div>
-          <SvgIcon name="we-chat" />
+          {/*<SvgIcon name="we-chat" />
           <ElSvgIcon name="Edit" />
           <ElButton onClick={handleClick}>{count.value}</ElButton>
-          <ElInput v-model={count.value} />
+          <ElInput v-model={count.value} />*/}
         </div>
       )
     }

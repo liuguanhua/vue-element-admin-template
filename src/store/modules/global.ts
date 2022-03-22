@@ -6,12 +6,9 @@ import routes from '@/router/routes'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
-    const { menuSideBgColor, menuTextColor, menuActiveTextColor } = useConfig()
     return {
-      collapse: false,
-      menuSideBgColor,
-      menuTextColor,
-      menuActiveTextColor,
+      collapse: true,
+      isFixedSidebar: true,
       routes,
     }
   },

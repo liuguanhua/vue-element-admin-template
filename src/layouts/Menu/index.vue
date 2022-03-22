@@ -1,23 +1,20 @@
 <script lang="tsx">
 import { defineComponent, computed } from 'vue'
 import { ElMenu, ElScrollbar } from 'element-plus'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
-import { useGlobalStore } from '@/store/modules/global'
 import MenuItem from './MenuItem.vue'
+
+import { useGlobalStore } from '@/store/modules/global'
+import { useConfig } from '@/components/hooks'
 
 export default defineComponent({
   setup() {
     const route = useRoute()
     const globalState = useGlobalStore()
-    const {
-      routes,
-      collapse,
-      menuSideBgColor,
-      menuTextColor,
-      menuActiveTextColor,
-    } = storeToRefs(globalState)
+    const { menuSideBgColor, menuTextColor, menuActiveTextColor } = useConfig()
+    const { routes, collapse } = storeToRefs(globalState)
     const activeMenu = computed(() => {
       const { meta, path } = route
       if (meta.activeMenu) {
@@ -27,13 +24,13 @@ export default defineComponent({
     })
     return () => {
       return (
-        <ElScrollbar>
+        <ElScrollbar class="side-menu-wrapper">
           <ElMenu
-            backgroundColor={menuSideBgColor.value}
+            backgroundColor={menuSideBgColor}
             defaultActive={activeMenu.value}
             collapse={collapse.value}
-            textColor={menuTextColor.value}
-            activeTextColor={menuActiveTextColor.value}
+            textColor={menuTextColor}
+            activeTextColor={menuActiveTextColor}
           >
             {routes.value.map((route) => (
               <MenuItem key={route.path} route={route} />
@@ -45,3 +42,41 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss">
+.side-menu-wrapper {
+  height: calc(100% - $sideLogoHeight);
+  .el-menu {
+    border-right: none;
+    > a .no-icon-title {
+      margin-left: 28px;
+    }
+  }
+  .el-menu-item.is-active {
+    background-color: var(--color-primary-0);
+  }
+  a {
+    display: block;
+    &:hover {
+      .el-menu-item {
+        background-color: var(--color-primary-1);
+        color: var(--color-white);
+      }
+    }
+  }
+  .is-active > .el-sub-menu__title,
+  .el-sub-menu__title:hover {
+    .sider-menu-title,
+    .el-sub-menu__icon-arrow {
+      color: var(--color-white);
+    }
+  }
+  .el-sub-menu {
+    .el-menu-item,
+    .sider-menu-title {
+      > .no-icon-title {
+        margin-left: 8px;
+      }
+    }
+  }
+}
+</style>

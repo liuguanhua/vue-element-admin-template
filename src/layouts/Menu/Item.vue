@@ -1,5 +1,6 @@
 <script lang="tsx">
 import { defineComponent } from 'vue'
+
 import { SvgIcon, ElSvgIcon } from '@/components/common'
 
 export default defineComponent({
@@ -25,7 +26,9 @@ export default defineComponent({
         <>
           {icon && <SvgIcon name={icon} />}
           {elIcon && <ElSvgIcon name={elIcon} />}
-          {title}
+          <span class={[{ 'no-icon-title': !icon && !elIcon }, 'vam']}>
+            {title}
+          </span>
         </>
       )
     }

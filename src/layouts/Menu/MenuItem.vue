@@ -1,7 +1,7 @@
 <script lang="tsx">
 import path from 'path'
-import { defineComponent, ref, reactive, PropType } from 'vue'
-import { ElSubMenu, ElMenuItem, ElIcon } from 'element-plus'
+import { defineComponent, ref, PropType } from 'vue'
+import { ElSubMenu, ElMenuItem } from 'element-plus'
 
 import Item from './Item.vue'
 import MenuLink from './Link.vue'
@@ -62,8 +62,9 @@ const MenuItem = defineComponent({
         return false
       }
       const showOnlyOne =
-        (showOneRouteChild(route) && !onlyOneChild.value.children) ||
-        (onlyOneChild.value.noShowChild && !route.alwaysShow)
+        showOneRouteChild(route) &&
+        (!onlyOneChild.value.children || onlyOneChild.value.noShowChild) &&
+        !route.alwaysShow
       const lastResolvePath = resolvePath(basePath)
       if (showOnlyOne) {
         const to = lastResolvePath(onlyOneChild.value.path)
@@ -73,18 +74,21 @@ const MenuItem = defineComponent({
               {onlyOneChild.value.meta && (
                 <Item {...(onlyOneChild.value.meta || route.meta)} />
               )}
-            </ElMenuItem>{' '}
+            </ElMenuItem>
           </MenuLink>
         )
       }
       return (
         <ElSubMenu
           v-slots={{
-            title: () => <Item {...route.meta} />,
+            title: () => (
+              <div class="sider-menu-title">
+                <Item {...route.meta} />
+              </div>
+            ),
           }}
           index={lastResolvePath(route.path)}
           popper-append-to-body
-          class="sub-menu-wrapper"
         >
           {route?.children?.map((item) => (
             <MenuItem
@@ -101,28 +105,3 @@ const MenuItem = defineComponent({
 
 export default MenuItem
 </script>
-
-<style lang="scss">
-.sub-menu-wrapper {
-  a {
-    display: block;
-    &:hover {
-      color: var(--color-white);
-      .el-menu-item {
-        background-color: var(--color-primary);
-      }
-    }
-  }
-  &.is-active {
-    .el-sub-menu__title {
-      color: var(--color-white);
-    }
-  }
-  .el-menu-item.is-active {
-    background-color: var(--color-primary);
-  }
-  .el-menu {
-    border-right: none;
-  }
-}
-</style>

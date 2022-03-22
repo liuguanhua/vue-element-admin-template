@@ -1,7 +1,7 @@
-import { BasicLayout as Layout } from '@/layouts'
-import { TRouteRowArray } from '@/scripts/types'
+import { BasicLayout as Layout, MainView } from '@/layouts'
+import { TRouteRow, TRouteRowArray } from '@/scripts/types'
 
-const componentsRouter = {
+const componentsRouter: TRouteRow = {
   path: '/components',
   component: Layout,
   redirect: 'noRedirect',
@@ -13,14 +13,30 @@ const componentsRouter = {
   children: [
     {
       path: 'tinymce',
-      name: 'TinymceDemo',
+      // name: 'TinymceDemo',
+      redirect: 'tinymce-2',
       meta: { title: 'Tinymce' },
-      component: () => import('@/pages/dashboard/index.vue'),
+      component: MainView,
+      alwaysShow: true,
+      children: [
+        {
+          path: 'tinymce-2',
+          name: 'TinymceDemo-2',
+          meta: { title: 'Tinymce-2' },
+          component: () => import('@/pages/dashboard/index.vue'),
+        },
+        // {
+        //   path: 'tinymce-3',
+        //   name: 'TinymceDemo-3',
+        //   meta: { title: 'Tinymce-3', elIcon: 'Edit' },
+        //   component: () => import('@/pages/dashboard/index.vue'),
+        // },
+      ],
     },
     {
       path: 'markdown',
       name: 'MarkdownDemo',
-      meta: { title: 'Markdown' },
+      meta: { title: 'Markdown', elIcon: 'Edit' },
       component: () => import('@/pages/dashboard/index.vue'),
     },
     {
@@ -131,11 +147,11 @@ const routes: TRouteRowArray = [
   },
   componentsRouter,
   componentsRouter1,
-  {
-    name: '404',
-    path: '/:w+',
-    hidden: true,
-    component: () => import('@/pages/notFound/index.vue'),
-  },
+  // {
+  //   name: '404',
+  //   path: '/:w+',
+  //   hidden: true,
+  //   component: () => import('@/pages/notFound/index.vue'),
+  // },
 ]
 export default routes

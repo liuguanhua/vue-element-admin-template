@@ -1,8 +1,13 @@
 $clsPrefix: demo2221;
-$color-dark: #001529;
-$menuSideBgColor: $color-dark;
+$color-dark-0: #001529;
+
+$sideLogoHeight: 70px;
+$menuSideWidth: 200px;
+$menuSideFoldWidth: 60px;
+$menuSideBgColor: $color-dark-0;
 $menuTextColor: #ffffffb3;
 $menuActiveTextColor: #fff;
+
 :root {
   --size-10: 10px;
   --size-12: 12px;
@@ -20,7 +25,8 @@ $menuActiveTextColor: #fff;
   --space-14: 14px;
   --space-16: 16px;
 
-  --color-primary: #639;
+  --color-primary-0: #639;
+  --color-primary-1: #4c1f78;
   --color-black: #000;
   --color-dark: #001529;
   --color-white: #fff;
