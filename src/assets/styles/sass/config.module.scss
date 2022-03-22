@@ -1,0 +1,8 @@
+@import './common/variable';
+
+:export {
+  clsPrefix: $clsPrefix;
+  menuSideBgColor: $menuSideBgColor;
+  menuTextColor: $menuTextColor;
+  menuActiveTextColor: $menuActiveTextColor;
+}

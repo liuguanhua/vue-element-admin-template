@@ -1,0 +1,53 @@
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+body {
+  font: lighter 14px/1.5 'Helvetica Neue', 'Helvetica', 'HanHei SC',
+    'PingFang SC', 'STHeitiSC-Light', 'Arial', 'Microsoft Yahei', sans-serif;
+  background-color: var(--color-light-gray);
+  color: var(--color-default-gray);
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+ul,
+li {
+  list-style: none;
+  @extend .r-m-p;
+}
+dl,
+dd {
+  @extend .r-m-p;
+}
+
+button {
+  padding: 0;
+  cursor: pointer;
+}
+button,
+[type='button'] {
+  -webkit-appearance: button;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-default-gray);
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+figure {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+}

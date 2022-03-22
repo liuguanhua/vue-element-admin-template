@@ -1,0 +1,33 @@
+$clsPrefix: demo2221;
+$color-dark: #001529;
+$menuSideBgColor: $color-dark;
+$menuTextColor: #ffffffb3;
+$menuActiveTextColor: #fff;
+:root {
+  --size-10: 10px;
+  --size-12: 12px;
+  --size-14: 14px;
+  --size-16: 16px;
+  --size-18: 18px;
+  --size-24: 24px;
+  --size-30: 30px;
+
+  --space-5: 5px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+
+  --color-primary: #639;
+  --color-black: #000;
+  --color-dark: #001529;
+  --color-white: #fff;
+  --color-transparent: transparent;
+  --color-light-gray: #f9f9f9;
+  --color-lighten-gray: #dadada;
+  --color-default-gray: #aaa;
+  --color-dark-gray: #888;
+  --color-highlight: red;
+}
