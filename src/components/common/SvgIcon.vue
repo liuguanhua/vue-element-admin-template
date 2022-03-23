@@ -19,8 +19,8 @@ export default defineComponent({
   },
   setup(props) {
     const { prefix, color, name } = props
+    const symbolId = `#${prefix}-${name}`
     return () => {
-      const symbolId = `#${prefix}-${name}`
       return (
         <i class="el-icon">
           <svg aria-hidden="true">

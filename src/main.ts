@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import 'virtual:svg-icons-register'
 
+import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'normalize.css/normalize.css'
 
@@ -12,6 +13,7 @@ const bootstrap = () => {
   const app = createApp(App)
   setupStore(app)
   setupRouter(app)
+  app.use(ElementPlus)
   app.mount('#app')
 }
 

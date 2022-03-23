@@ -1,13 +1,26 @@
 import type { App } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 import routes from './routes'
+import { useGlobalStore } from '@/store/modules/global'
 
 const history = createWebHistory()
 
 const router = createRouter({
   history,
   routes,
+})
+
+router.beforeEach((to, from, next) => {
+  NProgress.start()
+  const globalState = useGlobalStore()
+  globalState.$patch((state) => {
+    state.routes = routes
+  })
+  next()
+  NProgress.done()
 })
 
 export default function setupRouter(app: App<Element>) {

@@ -26,9 +26,11 @@ export default defineComponent({
         <>
           {icon && <SvgIcon name={icon} />}
           {elIcon && <ElSvgIcon name={elIcon} />}
-          <span class={[{ 'no-icon-title': !icon && !elIcon }, 'vam']}>
-            {title}
-          </span>
+          {title && (
+            <span class={[{ 'no-icon-title': !icon && !elIcon }, 'vam']}>
+              {title}
+            </span>
+          )}
         </>
       )
     }

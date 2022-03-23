@@ -1,5 +1,5 @@
 import { BasicLayout as Layout, MainView } from '@/layouts'
-import { TRouteRow, TRouteRowArray } from '@/scripts/types'
+import { TRouteRow, TRouteRowArray } from '@/types'
 
 const componentsRouter: TRouteRow = {
   path: '/components',
@@ -126,7 +126,7 @@ const componentsRouter1 = {
     {
       path: 'tinymce1',
       name: 'TinymceDemo1',
-      meta: { title: 'Tinymce1' },
+      meta: { title: 'Tinymce1', elIcon: 'AlarmClock' },
       component: () => import('@/pages/dashboard/index.vue'),
     },
   ],

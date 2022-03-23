@@ -13,8 +13,10 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const globalState = useGlobalStore()
-    const { menuSideBgColor, menuTextColor, menuActiveTextColor } = useConfig()
+    const { clsPrefix, menuSideBgColor, menuTextColor, menuActiveTextColor } =
+      useConfig('layout-aside')
     const { routes, collapse } = storeToRefs(globalState)
+    const filterRoutes = routes.value.filter((item) => !item.hidden)
     const activeMenu = computed(() => {
       const { meta, path } = route
       if (meta.activeMenu) {
@@ -24,16 +26,18 @@ export default defineComponent({
     })
     return () => {
       return (
-        <ElScrollbar class="side-menu-wrapper">
+        <ElScrollbar class={`${clsPrefix}-menu`}>
           <ElMenu
             backgroundColor={menuSideBgColor}
             defaultActive={activeMenu.value}
             collapse={collapse.value}
             textColor={menuTextColor}
             activeTextColor={menuActiveTextColor}
+            collapseTransition={false}
+            mode="vertical"
           >
-            {routes.value.map((route) => (
-              <MenuItem key={route.path} route={route} />
+            {filterRoutes.map((route) => (
+              <MenuItem key={route.path} level={1} route={route} />
             ))}
           </ElMenu>
         </ElScrollbar>
@@ -43,7 +47,10 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.side-menu-wrapper {
+$cls: 'layout-aside';
+$prefix: #{$clsPrefix}-#{$cls};
+
+.#{$prefix}-menu {
   height: calc(100% - $sideLogoHeight);
   .el-menu {
     border-right: none;

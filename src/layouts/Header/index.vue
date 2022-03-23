@@ -10,15 +10,15 @@ import { useGlobalStore } from '@/store/modules/global'
 
 export default defineComponent({
   setup() {
+    const { clsPrefix } = useConfig('layout-header')
+    const globalState = useGlobalStore()
+    const { collapse } = storeToRefs(globalState)
+    const toggleCollapsed = () => {
+      globalState.$patch((state) => {
+        state.collapse = !collapse.value
+      })
+    }
     return () => {
-      const { clsPrefix } = useConfig('layout-header')
-      const globalState = useGlobalStore()
-      const { collapse } = storeToRefs(globalState)
-      const toggleCollapsed = () => {
-        globalState.$patch((state) => {
-          state.collapse = !collapse.value
-        })
-      }
       return (
         <ElHeader layout-align="space-between center" class={`${clsPrefix}`}>
           <span onClick={toggleCollapsed}>
