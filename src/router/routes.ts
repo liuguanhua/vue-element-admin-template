@@ -4,7 +4,7 @@ import { TRouteRow, TRouteRowArray } from '@/types'
 const componentsRouter: TRouteRow = {
   path: '/components',
   component: Layout,
-  redirect: 'noRedirect',
+  redirect: '/components/tinymce',
   name: 'ComponentDemo',
   meta: {
     title: 'Components',
@@ -14,7 +14,7 @@ const componentsRouter: TRouteRow = {
     {
       path: 'tinymce',
       // name: 'TinymceDemo',
-      redirect: 'tinymce-2',
+      redirect: '/components/tinymce/tinymce-2',
       meta: { title: 'Tinymce' },
       component: MainView,
       alwaysShow: true,
@@ -116,7 +116,7 @@ const componentsRouter: TRouteRow = {
 const componentsRouter1 = {
   path: '/components1',
   component: Layout,
-  redirect: 'noRedirect',
+  redirect: '/components1/tinymce1',
   name: 'ComponentDemo1',
   meta: {
     title: 'Components1',
@@ -129,8 +129,15 @@ const componentsRouter1 = {
       meta: { title: 'Tinymce1', elIcon: 'AlarmClock' },
       component: () => import('@/pages/dashboard/index.vue'),
     },
+    {
+      path: 'tinymce2',
+      name: 'TinymceDemo2',
+      meta: { title: 'Tinymce2', elIcon: 'AlarmClock' },
+      component: () => import('@/pages/dashboard/index.vue'),
+    },
   ],
 }
+
 const routes: TRouteRowArray = [
   {
     path: '/',

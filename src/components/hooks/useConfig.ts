@@ -4,7 +4,7 @@ const { clsPrefix, ...rest } = settings
 
 const useConfig = (cls?: string): Dictionary => {
   return {
-    clsPrefix: cls ? `${clsPrefix}-${cls}` : clsPrefix,
+    clsPrefix: `${clsPrefix}${cls ? `-${cls}` : ''}`,
     ...rest,
   }
 }

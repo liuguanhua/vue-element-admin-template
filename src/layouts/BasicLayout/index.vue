@@ -1,7 +1,7 @@
 <script lang="tsx">
 import { defineComponent, KeepAlive, Transition, computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
-import { ElContainer, ElFooter, ElMain, ElTooltip } from 'element-plus'
+import { ElContainer, ElFooter, ElMain } from 'element-plus'
 
 import Sidebar from '../Sidebar/index.vue'
 import Header from '../Header/index.vue'

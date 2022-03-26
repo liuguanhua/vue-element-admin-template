@@ -14,6 +14,7 @@ export default defineComponent({
   setup(props, { slots }) {
     const { to } = props
     const isExtraLink = isExternal(to)
+
     return () => {
       const children = slots.default && slots.default()
       if (isExtraLink) {

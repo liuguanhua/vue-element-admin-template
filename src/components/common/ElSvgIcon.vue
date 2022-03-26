@@ -14,11 +14,7 @@ export default defineComponent({
   setup(props) {
     const { name } = props
     return () => {
-      return (
-        <ElIcon>
-          {ElSvg[name] && ElSvg[name].render && ElSvg[name].render()}
-        </ElIcon>
-      )
+      return <ElIcon>{ElSvg[name]?.render()}</ElIcon>
     }
   },
 })

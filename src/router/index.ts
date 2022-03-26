@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import NProgress from 'nprogress'
+
 import 'nprogress/nprogress.css'
 
 import routes from './routes'

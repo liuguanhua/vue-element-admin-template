@@ -45,6 +45,7 @@ const MenuItem = defineComponent({
     const { route, basePath: fromBasePath, level } = props
     const basePath = fromBasePath || route.path
     const onlyOneChild = ref<Dictionary>({})
+
     const showRouteChild = (children: TRouteRowArray = []) =>
       children.filter((item) => {
         if (item.hidden) {
@@ -66,11 +67,13 @@ const MenuItem = defineComponent({
       }
       return false
     }
+
     const showOnlyOne =
       showOneRouteChild(route) &&
       (!onlyOneChild.value.children || onlyOneChild.value.noShowChild) &&
       !route.alwaysShow
     const lastResolvePath = resolvePath(basePath)
+
     return () => {
       if (showOnlyOne) {
         if (!onlyOneChild.value.meta) {
@@ -87,13 +90,13 @@ const MenuItem = defineComponent({
                 <ElMenuItem
                   v-slots={{
                     title: () =>
-                      isCollapseAndOneLevel ? (
+                      isCollapseAndOneLevel && (
                         <span
                           class={[{ 'no-icon-title': !icon && !elIcon }, 'vam']}
                         >
                           {title}
                         </span>
-                      ) : null,
+                      ),
                   }}
                   index={to}
                 >

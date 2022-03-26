@@ -51,7 +51,7 @@ export default defineComponent({
 $prefix: generateClsPrefix('layout-aside');
 
 .#{$prefix} {
-  background-color: var(--color-dark);
+  background-color: var(--color-dark-0);
   transition: width 0.2s;
   &-title > div {
     height: $sideLogoHeight;

@@ -2,6 +2,7 @@
 import { defineComponent, ref } from 'vue'
 import { ElButton, ElInput } from 'element-plus'
 import { SvgIcon, ElSvgIcon } from '@/components/common'
+import { RouterLink } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
@@ -13,6 +14,7 @@ export default defineComponent({
     return () => {
       return (
         <div>
+          <RouterLink to="/">home</RouterLink>
           {/*<SvgIcon name="we-chat" />
           <ElSvgIcon name="Edit" />
           <ElButton onClick={handleClick}>{count.value}</ElButton>

@@ -22,6 +22,7 @@ export default defineComponent({
     } = useConfig('layout-aside')
     const { routes, collapse } = storeToRefs(globalState)
     const filterRoutes = routes.value.filter((item) => !item.hidden)
+
     const activeMenu = computed(() => {
       const { meta, path } = route
       if (meta.activeMenu) {
@@ -29,6 +30,7 @@ export default defineComponent({
       }
       return path
     })
+
     return () => {
       return (
         <ElScrollbar

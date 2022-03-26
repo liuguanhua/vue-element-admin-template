@@ -11,6 +11,7 @@
     "element-plus": "^2.1.4",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
+    "path-to-regexp": "^6.2.0",
     "pinia": "^2.0.12",
     "vue": "^3.2.25",
     "vue-router": "^4.0.13",

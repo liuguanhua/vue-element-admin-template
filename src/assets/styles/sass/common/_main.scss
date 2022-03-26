@@ -139,17 +139,8 @@ $padding-cls: '.p';
   text-transform: uppercase;
 }
 
-#nprogress div {
-  &.bar {
-    background-color: var(--color-primary-0);
-    height: 3px;
-  }
-  &.spinner-icon {
-    border-top-color: var(--color-primary-0);
-    border-left-color: var(--color-primary-0);
-  }
-  &.peg {
-    // box-shadow: none;
-    box-shadow: 0 0 10px #fff, 0 0 5px #fff;
+.hover-color-primary-0 {
+  &:hover {
+    color: var(--color-primary-0);
   }
 }
