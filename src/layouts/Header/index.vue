@@ -33,8 +33,7 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-$cls: 'layout-header';
-$prefix: #{$clsPrefix}-#{$cls};
+$prefix: generateClsPrefix('layout-header');
 
 .#{$prefix} {
   height: 60px;

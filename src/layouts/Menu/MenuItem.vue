@@ -1,7 +1,8 @@
 <script lang="tsx">
 import path from 'path'
 import { defineComponent, ref, PropType } from 'vue'
-import { ElSubMenu, ElMenuItem, ElMenuItemGroup } from 'element-plus'
+import { ElSubMenu, ElMenuItem } from 'element-plus'
+import { storeToRefs } from 'pinia'
 
 import Item from './Item.vue'
 import MenuLink from './Link.vue'
@@ -10,7 +11,6 @@ import { TRouteRow, TRouteRowArray } from '@/types'
 import { isExternal } from '@/scripts'
 import { useGlobalStore } from '@/store/modules/global'
 import { useConfig } from '@/components/hooks'
-import { storeToRefs } from 'pinia'
 
 const resolvePath = (basePath: string) => {
   return (routePath: string) => {
@@ -39,6 +39,7 @@ const MenuItem = defineComponent({
     },
   },
   setup(props) {
+    const { clsPrefix } = useConfig('layout-aside')
     const globalState = useGlobalStore()
     const { collapse } = storeToRefs(globalState)
     const { route, basePath: fromBasePath, level } = props
@@ -117,6 +118,7 @@ const MenuItem = defineComponent({
           }}
           index={lastResolvePath(route.path)}
           popperAppendToBody
+          popperClass={`${clsPrefix}-menu ${clsPrefix}-popper`}
         >
           {route?.children?.map((item) => (
             <MenuItem

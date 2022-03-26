@@ -48,8 +48,7 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-$cls: 'layout-aside';
-$prefix: #{$clsPrefix}-#{$cls};
+$prefix: generateClsPrefix('layout-aside');
 
 .#{$prefix} {
   background-color: var(--color-dark);
@@ -64,7 +63,7 @@ $prefix: #{$clsPrefix}-#{$cls};
   }
   &-logo {
     width: 40px;
-    height: 40px;
+    height: 35px;
   }
   &-fold {
     .#{$prefix} {
@@ -78,16 +77,15 @@ $prefix: #{$clsPrefix}-#{$cls};
 }
 </style>
 <style lang="scss">
-$cls: 'layout-aside';
-$prefix: #{$clsPrefix}-#{$cls};
-
+$prefix: generateClsPrefix('layout-aside');
 .#{$prefix} {
   &-fold {
-    .sider-menu-title > span {
-      visibility: hidden;
-    }
+    .sider-menu-title > span,
     .el-menu > a span {
-      visibility: hidden;
+      display: none;
+    }
+    .is-active .el-sub-menu__title {
+      background-color: var(--color-primary-0) !important;
     }
   }
 }

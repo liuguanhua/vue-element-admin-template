@@ -36,7 +36,7 @@ const componentsRouter: TRouteRow = {
     {
       path: 'markdown',
       name: 'MarkdownDemo',
-      meta: { title: 'Markdown', elIcon: 'Edit' },
+      meta: { title: 'Markdown' },
       component: () => import('@/pages/dashboard/index.vue'),
     },
     {

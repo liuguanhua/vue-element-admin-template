@@ -6,7 +6,7 @@ import { TRouteRowArray } from '@/types'
 export const useGlobalStore = defineStore('global', {
   state: () => {
     return {
-      collapse: true,
+      collapse: false,
       isFixedSidebar: true,
       routes: [] as TRouteRowArray,
     }

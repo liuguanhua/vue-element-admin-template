@@ -13,8 +13,13 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const globalState = useGlobalStore()
-    const { clsPrefix, menuSideBgColor, menuTextColor, menuActiveTextColor } =
-      useConfig('layout-aside')
+    const {
+      clsPrefix,
+      sideLogoHeight,
+      menuSideBgColor,
+      menuTextColor,
+      menuActiveTextColor,
+    } = useConfig('layout-aside')
     const { routes, collapse } = storeToRefs(globalState)
     const filterRoutes = routes.value.filter((item) => !item.hidden)
     const activeMenu = computed(() => {
@@ -26,7 +31,12 @@ export default defineComponent({
     })
     return () => {
       return (
-        <ElScrollbar class={`${clsPrefix}-menu`}>
+        <ElScrollbar
+          style={{
+            height: `calc(100% - ${sideLogoHeight})`,
+          }}
+          class={`${clsPrefix}-menu`}
+        >
           <ElMenu
             backgroundColor={menuSideBgColor}
             defaultActive={activeMenu.value}
@@ -34,7 +44,6 @@ export default defineComponent({
             textColor={menuTextColor}
             activeTextColor={menuActiveTextColor}
             collapseTransition={false}
-            mode="vertical"
           >
             {filterRoutes.map((route) => (
               <MenuItem key={route.path} level={1} route={route} />
@@ -47,43 +56,47 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-$cls: 'layout-aside';
-$prefix: #{$clsPrefix}-#{$cls};
+$prefix: generateClsPrefix('layout-aside');
 
-.#{$prefix}-menu {
-  height: calc(100% - $sideLogoHeight);
-  .el-menu {
-    border-right: none;
-    > a .no-icon-title {
-      margin-left: 28px;
+.#{$prefix} {
+  &-menu {
+    .el-menu {
+      border-right: none;
+      > a .no-icon-title {
+        margin-left: 28px;
+      }
     }
-  }
-  .el-menu-item.is-active {
-    background-color: var(--color-primary-0);
-  }
-  a {
-    display: block;
-    &:hover {
-      .el-menu-item {
-        background-color: var(--color-primary-1);
+    .el-menu-item.is-active {
+      background-color: var(--color-primary-0);
+    }
+    a {
+      display: block;
+      &:hover {
+        .el-menu-item {
+          background-color: var(--color-primary-1);
+          color: var(--color-white);
+        }
+      }
+    }
+    .is-active > .el-sub-menu__title,
+    .el-sub-menu__title:hover {
+      .sider-menu-title,
+      .el-sub-menu__icon-arrow {
         color: var(--color-white);
       }
     }
-  }
-  .is-active > .el-sub-menu__title,
-  .el-sub-menu__title:hover {
-    .sider-menu-title,
-    .el-sub-menu__icon-arrow {
-      color: var(--color-white);
-    }
-  }
-  .el-sub-menu {
-    .el-menu-item,
-    .sider-menu-title {
-      > .no-icon-title {
-        margin-left: 8px;
+    .el-sub-menu {
+      .el-menu-item,
+      .sider-menu-title {
+        > .no-icon-title {
+          margin-left: 8px;
+        }
       }
     }
+  }
+  &-popper {
+    max-height: 100%;
+    overflow: auto;
   }
 }
 </style>

@@ -118,3 +118,8 @@ $locate-space-list: map.merge(
     clear: both;
   }
 }
+
+@function generateClsPrefix($cls: '') {
+  $reslut: #{$clsPrefix} + if($cls == '', '', '-') + #{$cls};
+  @return $reslut;
+}

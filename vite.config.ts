@@ -26,7 +26,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "./src/assets/styles/sass/common/variable";`,
+        additionalData: `
+          @import "./src/assets/styles/sass/common/variable";
+          @import "./src/assets/styles/sass/common/mixin";
+        `,
       },
     },
   },
