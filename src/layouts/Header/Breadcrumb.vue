@@ -5,13 +5,8 @@ import { compile } from 'path-to-regexp'
 import { useRoute, useRouter } from 'vue-router'
 
 import { TRouteRow, TRouteRowArray } from '@/types'
+import { DEFAULT_ROUTE } from '@/scripts/constant'
 import { useConfig } from '@/components/hooks'
-
-const defaultPageRoute = {
-  path: '/dashboard',
-  name: 'Dashboard',
-  meta: { title: '首页', elIcon: 'Edit', affix: true },
-}
 
 export default defineComponent({
   setup() {
@@ -26,8 +21,11 @@ export default defineComponent({
       )
       const [firstRoute] = matched
       //第一个路由是否为默认页
-      if (firstRoute.name !== defaultPageRoute.name) {
-        matched = [defaultPageRoute, ...matched]
+      if (firstRoute.name !== DEFAULT_ROUTE.name) {
+        matched = [
+          { ...DEFAULT_ROUTE, path: `/${DEFAULT_ROUTE.path}` },
+          ...matched,
+        ]
       }
       breadcrumbList.value = matched
     }

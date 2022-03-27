@@ -21,7 +21,6 @@ export default defineComponent({
       menuActiveTextColor,
     } = useConfig('layout-aside')
     const { routes, collapse } = storeToRefs(globalState)
-    const filterRoutes = routes.value.filter((item) => !item.hidden)
 
     const activeMenu = computed(() => {
       const { meta, path } = route
@@ -47,7 +46,7 @@ export default defineComponent({
             activeTextColor={menuActiveTextColor}
             collapseTransition={false}
           >
-            {filterRoutes.map((route) => (
+            {routes.value.map((route) => (
               <MenuItem key={route.path} level={1} route={route} />
             ))}
           </ElMenu>

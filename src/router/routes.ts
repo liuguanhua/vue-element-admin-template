@@ -1,4 +1,6 @@
 import { BasicLayout as Layout, MainView } from '@/layouts'
+
+import { DEFAULT_ROUTE } from '@/scripts/constant'
 import { TRouteRow, TRouteRowArray } from '@/types'
 
 const componentsRouter: TRouteRow = {
@@ -135,6 +137,18 @@ const componentsRouter1 = {
       meta: { title: 'Tinymce2', elIcon: 'AlarmClock' },
       component: () => import('@/pages/dashboard/index.vue'),
     },
+    {
+      path: 'tinymce3/:id',
+      component: () => import('@/pages/dashboard/index.vue'),
+      name: 'TinymceDemo3',
+      meta: {
+        title: 'TinymceDemo3',
+        elIcon: 'Edit',
+        affix: true,
+        activeMenu: '/components1/tinymce2',
+      },
+      hidden: true,
+    },
   ],
 }
 
@@ -145,10 +159,8 @@ const routes: TRouteRowArray = [
     redirect: '/dashboard',
     children: [
       {
-        path: 'dashboard',
         component: () => import('@/pages/dashboard/index.vue'),
-        name: 'Dashboard',
-        meta: { title: '首页', elIcon: 'Edit', affix: true },
+        ...DEFAULT_ROUTE,
       },
     ],
   },

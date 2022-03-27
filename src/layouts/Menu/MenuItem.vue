@@ -75,6 +75,9 @@ const MenuItem = defineComponent({
     const lastResolvePath = resolvePath(basePath)
 
     return () => {
+      if (route.hidden) {
+        return null
+      }
       if (showOnlyOne) {
         if (!onlyOneChild.value.meta) {
           return null
