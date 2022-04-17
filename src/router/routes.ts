@@ -144,7 +144,6 @@ const componentsRouter1 = {
       meta: {
         title: 'TinymceDemo3',
         elIcon: 'Edit',
-        affix: true,
         activeMenu: '/components1/tinymce2',
       },
       hidden: true,

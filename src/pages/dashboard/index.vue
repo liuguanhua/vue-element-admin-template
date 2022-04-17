@@ -15,7 +15,10 @@ export default defineComponent({
       return (
         <div>
           <RouterLink to="/">home</RouterLink>
+          <br />
           <RouterLink to="/components1/tinymce3/2">tinymce2</RouterLink>
+          <br />
+          <RouterLink to="/components1/tinymce3/4">tinymce4</RouterLink>
           {/*<SvgIcon name="we-chat" />
           <ElSvgIcon name="Edit" />
           <ElButton onClick={handleClick}>{count.value}</ElButton>
