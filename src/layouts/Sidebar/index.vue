@@ -20,7 +20,9 @@ export default defineComponent({
       const width = collapse.value ? menuSideFoldWidth : menuSideWidth
       return (
         <>
-          {isFixedSidebar.value && <div style={{ width }}></div>}
+          {isFixedSidebar.value && (
+            <div layout-flex="none" style={{ width }}></div>
+          )}
           <ElAside
             class={[
               { [`${clsPrefix}-fixed`]: isFixedSidebar.value },

@@ -3,3 +3,5 @@ export const DEFAULT_ROUTE = {
   name: 'Dashboard',
   meta: { title: '首页', elIcon: 'Edit', affix: true },
 }
+
+export const TAGS_VIEW_KEY = 'TAGS_VIEW_KEY'

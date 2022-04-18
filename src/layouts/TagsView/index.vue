@@ -8,7 +8,14 @@ import { ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
 import { useConfig } from '@/components/hooks'
 import { TRouteRow, TRouteRowArray } from '@/types'
 import { useGlobalStore } from '@/store/modules/global'
-import { DEFAULT_ROUTE } from '@/scripts/constant'
+import {
+  DEFAULT_ROUTE,
+  getStorage,
+  isUndefined,
+  setStorage,
+  TAGS_VIEW_KEY,
+  isVaildArray,
+} from '@/scripts'
 
 type TRouteRowAny = Omit<TRouteRow, 'meta'> & {
   meta?: any
@@ -47,13 +54,15 @@ export default defineComponent({
       tagsData: Dictionary[]
       activeKey: string
     }>({
-      tagsData: filterAffixTags(routes.value),
+      tagsData: [],
       activeKey: '',
     })
 
     const addTags = () => {
-      console.log(route)
       state.activeKey = route.path as string
+      setStorage(TAGS_VIEW_KEY, {
+        activeKey: state.activeKey,
+      })
       if (
         !route.meta?.title ||
         !route.name ||
@@ -62,12 +71,21 @@ export default defineComponent({
         return
       }
       state.tagsData.push({ ...route })
+      setStorage(TAGS_VIEW_KEY, {
+        tagsData: state.tagsData,
+      })
     }
 
     const onTabClick = (pane: TabsPaneContext) => {
-      const { index } = pane
-      console.log(index)
-      // const activeRoute = state.tagsData.find((item) => item.name == paneName)
+      const { index, paneName } = pane
+      if (paneName == route.path || isUndefined(index)) {
+        return
+      }
+      const { path, query } = state.tagsData[index]
+      router.push({
+        path,
+        query,
+      })
     }
 
     const onTabRemove = (paneName: string | number) => {
@@ -86,8 +104,22 @@ export default defineComponent({
       })
     }
 
+    const initTagsView = () => {
+      const storeTagsView = getStorage(TAGS_VIEW_KEY)
+      if (!storeTagsView || !isVaildArray(storeTagsView.tagsData)) {
+        state.tagsData = filterAffixTags(routes.value)
+        return addTags()
+      }
+      state.tagsData = storeTagsView.tagsData
+      state.activeKey = state.tagsData.some(
+        (item) => item.path == storeTagsView.activeKey
+      )
+        ? storeTagsView.activeKey
+        : `/${DEFAULT_ROUTE.path}`
+    }
+
     onMounted(() => {
-      addTags()
+      initTagsView()
     })
 
     watch(

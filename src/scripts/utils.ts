@@ -53,3 +53,15 @@ export function getStorage(key: string, isDefaultEmptyObject: boolean = true) {
 export function isObject(value: any): boolean {
   return Object.prototype.toString.call(value) === '[object Object]'
 }
+
+export function isUndefined(value: any): value is undefined {
+  return typeof value === 'undefined'
+}
+
+export function isArray(value: any): value is Array<any> {
+  return Array.isArray(value)
+}
+
+export function isVaildArray(value: any): boolean {
+  return isArray(value) && Boolean(value.length)
+}
