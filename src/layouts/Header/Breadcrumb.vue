@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent, ref, onMounted, watch } from 'vue'
+import { defineComponent, ref, onMounted, watch, TransitionGroup } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { compile } from 'path-to-regexp'
 import { useRoute, useRouter } from 'vue-router'
@@ -58,19 +58,21 @@ export default defineComponent({
     return () => {
       return (
         <ElBreadcrumb class={`${clsPrefix}-breadcrumb`} separator="/">
-          {breadcrumbList.value.map((item, index) => {
-            const { path, redirect, meta = {} } = item
-            const isLast = index == breadcrumbList.value.length - 1
-            return (
-              <ElBreadcrumbItem key={path}>
-                {redirect == 'noRedirect' || isLast ? (
-                  <span class="color-default-gray">{meta.title}</span>
-                ) : (
-                  <a onClick={goJump(item)}>{meta.title}</a>
-                )}
-              </ElBreadcrumbItem>
-            )
-          })}
+          <TransitionGroup name="breadcrumb">
+            {breadcrumbList.value.map((item, index) => {
+              const { path, redirect, meta = {} } = item
+              const isLast = index == breadcrumbList.value.length - 1
+              return (
+                <ElBreadcrumbItem key={path}>
+                  {redirect == 'noRedirect' || isLast ? (
+                    <span class="color-default-gray">{meta.title}</span>
+                  ) : (
+                    <a onClick={goJump(item)}>{meta.title}</a>
+                  )}
+                </ElBreadcrumbItem>
+              )
+            })}
+          </TransitionGroup>
         </ElBreadcrumb>
       )
     }

@@ -13,7 +13,7 @@ import {
   getStorage,
   isUndefined,
   setStorage,
-  TAGS_VIEW_KEY,
+  HISTORY_ROUTE_KEY,
   isVaildArray,
 } from '@/scripts'
 
@@ -21,58 +21,58 @@ type TRouteRowAny = Omit<TRouteRow, 'meta'> & {
   meta?: any
 }
 
-const filterAffixTags = (routes: TRouteRowArray, basePath = '/') => {
-  let tags: Dictionary[] = []
+const filterAffixHistory = (routes: TRouteRowArray, basePath = '/') => {
+  let data: Dictionary[] = []
   routes.forEach((route) => {
     if (route.meta && route.meta.affix) {
-      const tagPath = path.resolve(basePath, route.path)
-      tags.push({
-        fullPath: tagPath,
-        path: tagPath,
+      const routePath = path.resolve(basePath, route.path)
+      data.push({
+        fullPath: routePath,
+        path: routePath,
         name: route.name,
         meta: { ...route.meta },
       })
     }
     if (route.children) {
-      const tempTags = filterAffixTags(route.children, route.path)
-      if (tempTags.length >= 1) {
-        tags = [...tags, ...tempTags]
+      const tempHistory = filterAffixHistory(route.children, route.path)
+      if (tempHistory.length >= 1) {
+        data = [...data, ...tempHistory]
       }
     }
   })
-  return tags
+  return data
 }
 
 export default defineComponent({
   setup(props, { slots }) {
-    const { clsPrefix } = useConfig('layout-tags-view')
+    const { clsPrefix } = useConfig('layout-history-view')
     const route = useRoute()
     const router = useRouter()
     const globalState = useGlobalStore()
     const { routes } = storeToRefs(globalState)
     const state = reactive<{
-      tagsData: Dictionary[]
+      historyData: Dictionary[]
       activeKey: string
     }>({
-      tagsData: [],
+      historyData: [],
       activeKey: '',
     })
 
-    const addTags = () => {
+    const addRoute = () => {
       state.activeKey = route.path as string
-      setStorage(TAGS_VIEW_KEY, {
+      setStorage(HISTORY_ROUTE_KEY, {
         activeKey: state.activeKey,
       })
       if (
         !route.meta?.title ||
         !route.name ||
-        state.tagsData.some((item) => item.path == route.path)
+        state.historyData.some((item) => item.path == route.path)
       ) {
         return
       }
-      state.tagsData.push({ ...route })
-      setStorage(TAGS_VIEW_KEY, {
-        tagsData: state.tagsData,
+      state.historyData.push({ ...route })
+      setStorage(HISTORY_ROUTE_KEY, {
+        historyData: state.historyData.map(({ matched, ...rest }) => rest),
       })
     }
 
@@ -81,7 +81,7 @@ export default defineComponent({
       if (paneName == route.path || isUndefined(index)) {
         return
       }
-      const { path, query } = state.tagsData[index]
+      const { path, query } = state.historyData[index]
       router.push({
         path,
         query,
@@ -89,11 +89,13 @@ export default defineComponent({
     }
 
     const onTabRemove = (paneName: string | number) => {
-      state.tagsData = state.tagsData.filter((item) => item.path !== paneName)
+      state.historyData = state.historyData.filter(
+        (item) => item.path !== paneName
+      )
       if (paneName !== route.path) {
         return
       }
-      let activeRoute = state.tagsData.slice(-1)[0]
+      let activeRoute = state.historyData.slice(-1)[0]
       if (!activeRoute) {
         activeRoute = { ...DEFAULT_ROUTE, path: `/${DEFAULT_ROUTE.path}` }
       }
@@ -104,28 +106,28 @@ export default defineComponent({
       })
     }
 
-    const initTagsView = () => {
-      const storeTagsView = getStorage(TAGS_VIEW_KEY)
-      if (!storeTagsView || !isVaildArray(storeTagsView.tagsData)) {
-        state.tagsData = filterAffixTags(routes.value)
-        return addTags()
+    const initHistoryRoute = () => {
+      const storeHistoryRoute = getStorage(HISTORY_ROUTE_KEY)
+      if (!storeHistoryRoute || !isVaildArray(storeHistoryRoute.historyData)) {
+        state.historyData = filterAffixHistory(routes.value)
+        return addRoute()
       }
-      state.tagsData = storeTagsView.tagsData
-      state.activeKey = state.tagsData.some(
-        (item) => item.path == storeTagsView.activeKey
+      state.historyData = storeHistoryRoute.historyData
+      state.activeKey = state.historyData.some(
+        (item) => item.path == storeHistoryRoute.activeKey
       )
-        ? storeTagsView.activeKey
+        ? storeHistoryRoute.activeKey
         : `/${DEFAULT_ROUTE.path}`
     }
 
     onMounted(() => {
-      initTagsView()
+      initHistoryRoute()
     })
 
     watch(
       () => route.path,
       () => {
-        addTags()
+        addRoute()
       }
     )
 
@@ -138,7 +140,7 @@ export default defineComponent({
             onTab-remove={onTabRemove}
             onTab-click={onTabClick}
           >
-            {state.tagsData.map((item) => {
+            {state.historyData.map((item) => {
               const { meta, path } = item
               return (
                 <ElTabPane
@@ -157,21 +159,19 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-$prefix: generateClsPrefix('layout-tags-view');
-
+$prefix: generateClsPrefix('layout-history-view');
 .#{$prefix} {
-  transition: width 0.2s;
-  &-title > div {
-    height: $sideLogoHeight;
-  }
 }
 </style>
 <style lang="scss">
-$prefix: generateClsPrefix('layout-tags-view');
+$prefix: generateClsPrefix('layout-history-view');
 
 .#{$prefix} {
   .el-tabs__header {
     margin-bottom: 0;
+  }
+  .el-tabs__item.is-active {
+    color: var(--color-primary-0);
   }
   .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
     border-bottom-color: var(--color-light-gray);

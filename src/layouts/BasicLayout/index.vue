@@ -5,7 +5,7 @@ import { ElContainer, ElFooter, ElMain } from 'element-plus'
 
 import Sidebar from '../Sidebar/index.vue'
 import Header from '../Header/index.vue'
-import TagsView from '../TagsView/index.vue'
+import HistoryRoute from '../HistoryRoute/index.vue'
 
 export default defineComponent({
   setup() {
@@ -17,7 +17,7 @@ export default defineComponent({
           <Sidebar />
           <ElContainer>
             <Header />
-            <TagsView />
+            <HistoryRoute />
             <ElMain>
               <RouterView key={key.value}>
                 {{

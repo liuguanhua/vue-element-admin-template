@@ -4,4 +4,4 @@ export const DEFAULT_ROUTE = {
   meta: { title: '首页', elIcon: 'Edit', affix: true },
 }
 
-export const TAGS_VIEW_KEY = 'TAGS_VIEW_KEY'
+export const HISTORY_ROUTE_KEY = 'HISTORY_ROUTE_KEY'
