@@ -1,6 +1,6 @@
 <script lang="tsx">
 import path from 'path'
-import { defineComponent, watch, reactive, onMounted } from 'vue'
+import { defineComponent, watch, reactive, onMounted, toRaw } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
@@ -49,7 +49,7 @@ export default defineComponent({
     const route = useRoute()
     const router = useRouter()
     const globalState = useGlobalStore()
-    const { routes } = storeToRefs(globalState)
+    const { routes, cacheViews } = storeToRefs(globalState)
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
@@ -65,12 +65,12 @@ export default defineComponent({
       })
       if (
         !route.meta?.title ||
-        !route.name ||
         state.historyData.some((item) => item.path == route.path)
       ) {
         return
       }
-      state.historyData.push({ ...route })
+      console.log({ ...route })
+      state.historyData.push({ ...route }) // 防止相互影响
       setStorage(HISTORY_ROUTE_KEY, {
         historyData: state.historyData.map(({ matched, ...rest }) => rest),
       })
@@ -110,15 +110,25 @@ export default defineComponent({
       const storeHistoryRoute = getStorage(HISTORY_ROUTE_KEY)
       if (!storeHistoryRoute || !isVaildArray(storeHistoryRoute.historyData)) {
         state.historyData = filterAffixHistory(routes.value)
-        return addRoute()
+        addRoute()
+      } else {
+        state.historyData = storeHistoryRoute.historyData.filter(
+          (item) => item.name && item.meta?.title
+        )
+        state.activeKey = state.historyData.some(
+          (item) => item.path == storeHistoryRoute.activeKey
+        )
+          ? storeHistoryRoute.activeKey
+          : `/${DEFAULT_ROUTE.path}`
       }
-      state.historyData = storeHistoryRoute.historyData
-      state.activeKey = state.historyData.some(
-        (item) => item.path == storeHistoryRoute.activeKey
-      )
-        ? storeHistoryRoute.activeKey
-        : `/${DEFAULT_ROUTE.path}`
     }
+
+    watch(
+      () => state.historyData,
+      () => {
+        console.log(Math.random())
+      }
+    )
 
     onMounted(() => {
       initHistoryRoute()
@@ -160,7 +170,9 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 $prefix: generateClsPrefix('layout-history-view');
+
 .#{$prefix} {
+  background-attachment: fixed;
 }
 </style>
 <style lang="scss">

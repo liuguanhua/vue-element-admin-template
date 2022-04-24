@@ -1,20 +1,17 @@
-
-/* breadcrumb transition */
+.breadcrumb-move, /* 对移动中的元素应用的过渡 */
 .breadcrumb-enter-active,
 .breadcrumb-leave-active {
-  transition: all .5s;
+  transition: all 0.4s ease;
 }
 
-.breadcrumb-enter,
-.breadcrumb-leave-active {
+.breadcrumb-enter-from,
+.breadcrumb-leave-to {
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateX(20px);
 }
 
-.breadcrumb-move {
-  transition: all .5s;
-}
-
+/* 确保将离开的元素从布局流中删除
+  以便能够正确地计算移动的动画。 */
 .breadcrumb-leave-active {
   position: absolute;
 }

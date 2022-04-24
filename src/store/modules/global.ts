@@ -9,6 +9,7 @@ export const useGlobalStore = defineStore('global', {
       collapse: false,
       isFixedSidebar: true,
       routes: [] as TRouteRowArray,
+      cacheViews: [],
     }
   },
   actions: {
