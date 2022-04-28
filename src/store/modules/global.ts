@@ -8,13 +8,12 @@ export const useGlobalStore = defineStore('global', {
     return {
       collapse: false,
       isFixedSidebar: true,
+      isFixedHeader: true,
       routes: [] as TRouteRowArray,
-      cacheViews: [],
+      cacheViews: [] as string[],
     }
   },
   actions: {
-    updateState(state, payload) {
-      return replaceState(state, payload)
-    },
+    updateState(payload) {},
   },
 })

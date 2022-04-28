@@ -6,7 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
 
 import { useConfig } from '@/components/hooks'
-import { TRouteRow, TRouteRowArray } from '@/types'
+import { TRouteRowArray } from '@/types'
 import { useGlobalStore } from '@/store/modules/global'
 import {
   DEFAULT_ROUTE,
@@ -16,10 +16,6 @@ import {
   HISTORY_ROUTE_KEY,
   isVaildArray,
 } from '@/scripts'
-
-type TRouteRowAny = Omit<TRouteRow, 'meta'> & {
-  meta?: any
-}
 
 const filterAffixHistory = (routes: TRouteRowArray, basePath = '/') => {
   let data: Dictionary[] = []
@@ -44,12 +40,12 @@ const filterAffixHistory = (routes: TRouteRowArray, basePath = '/') => {
 }
 
 export default defineComponent({
-  setup(props, { slots }) {
+  setup() {
     const { clsPrefix } = useConfig('layout-history-view')
     const route = useRoute()
     const router = useRouter()
     const globalState = useGlobalStore()
-    const { routes, cacheViews } = storeToRefs(globalState)
+    const { routes } = storeToRefs(globalState)
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
@@ -69,8 +65,7 @@ export default defineComponent({
       ) {
         return
       }
-      console.log({ ...route })
-      state.historyData.push({ ...route }) // 防止相互影响
+      state.historyData = [...state.historyData, ...[{ ...route }]] // 防止相互影响
       setStorage(HISTORY_ROUTE_KEY, {
         historyData: state.historyData.map(({ matched, ...rest }) => rest),
       })
@@ -123,16 +118,21 @@ export default defineComponent({
       }
     }
 
-    watch(
-      () => state.historyData,
-      () => {
-        console.log(Math.random())
-      }
-    )
-
     onMounted(() => {
       initHistoryRoute()
     })
+
+    watch(
+      () => state.historyData,
+      () => {
+        const cacheData = state.historyData
+          .filter((item) => !item.noCache && item.name)
+          .map((item) => item.name)
+        globalState.$patch({
+          cacheViews: cacheData,
+        })
+      }
+    )
 
     watch(
       () => route.path,
@@ -172,21 +172,17 @@ export default defineComponent({
 $prefix: generateClsPrefix('layout-history-view');
 
 .#{$prefix} {
-  background-attachment: fixed;
-}
-</style>
-<style lang="scss">
-$prefix: generateClsPrefix('layout-history-view');
-
-.#{$prefix} {
-  .el-tabs__header {
-    margin-bottom: 0;
-  }
-  .el-tabs__item.is-active {
-    color: var(--color-primary-0);
-  }
-  .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
-    border-bottom-color: var(--color-light-gray);
+  background-color: var(--color-light-gray);
+  :deep() {
+    .el-tabs__header {
+      margin-bottom: 0;
+    }
+    .el-tabs__item.is-active {
+      color: var(--color-primary-0);
+    }
+    .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
+      border-bottom-color: var(--color-light-gray);
+    }
   }
 }
 </style>

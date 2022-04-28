@@ -56,11 +56,11 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 $prefix: generateClsPrefix('layout-aside');
 
 .#{$prefix} {
-  &-menu {
+  &-menu :deep() {
     .el-menu {
       border-right: none;
       > a .no-icon-title {

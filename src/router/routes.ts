@@ -39,7 +39,7 @@ const componentsRouter: TRouteRow = {
       path: 'markdown',
       name: 'MarkdownDemo',
       meta: { title: 'Markdown' },
-      component: () => import('@/pages/dashboard/index.vue'),
+      component: () => import('@/pages/markdown/index.vue'),
     },
     {
       path: 'json-editor',

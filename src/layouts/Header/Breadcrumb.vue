@@ -79,7 +79,7 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 $prefix: generateClsPrefix('layout-header');
 
 .#{$prefix} {

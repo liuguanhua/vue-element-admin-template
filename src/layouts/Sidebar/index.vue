@@ -75,19 +75,14 @@ $prefix: generateClsPrefix('layout-aside');
         }
       }
     }
-  }
-}
-</style>
-<style lang="scss">
-$prefix: generateClsPrefix('layout-aside');
-.#{$prefix} {
-  &-fold {
-    .sider-menu-title > span,
-    .el-menu > a span {
-      display: none;
-    }
-    .is-active .el-sub-menu__title {
-      background-color: var(--color-primary-0) !important;
+    :deep() {
+      .sider-menu-title > span,
+      .el-menu > a span {
+        display: none;
+      }
+      .is-active .el-sub-menu__title {
+        background-color: var(--color-primary-0) !important;
+      }
     }
   }
 }

@@ -16,15 +16,6 @@ export default defineComponent({
         <div style="height:80%;">
           <RouterLink to="/">home</RouterLink>
           <br />
-          <RouterLink to="/components/markdown">markdown</RouterLink>
-          <br />
-          <RouterLink to="/components1/tinymce3/2">tinymce2</RouterLink>
-          <br />
-          <RouterLink to="/components1/tinymce3/4">tinymce4</RouterLink>
-          {/*<SvgIcon name="we-chat" />
-          <ElSvgIcon name="Edit" />
-          <ElButton onClick={handleClick}>{count.value}</ElButton>
-          <ElInput v-model={count.value} />*/}
         </div>
       )
     }
