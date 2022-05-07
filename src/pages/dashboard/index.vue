@@ -13,7 +13,7 @@ export default defineComponent({
     }
     return () => {
       return (
-        <div style="height:80%;">
+        <div style="height:1000px">
           <RouterLink to="/">home</RouterLink>
           <br />
           <RouterLink to="/components/markdown">markdown</RouterLink>

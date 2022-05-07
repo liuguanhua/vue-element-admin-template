@@ -1,9 +1,9 @@
 <script lang="tsx">
 import path from 'path'
-import { defineComponent, watch, reactive, onMounted, toRaw } from 'vue'
+import { defineComponent, watch, reactive, onMounted, toRaw, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
-import { ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
+import { ElScrollbar, ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
 
 import { useConfig } from '@/components/hooks'
 import { TRouteRowArray } from '@/types'
@@ -39,6 +39,16 @@ const filterAffixHistory = (routes: TRouteRowArray, basePath = '/') => {
   return data
 }
 
+function triggerResize() {
+  if (typeof Event === 'function') {
+    window.dispatchEvent(new Event('resize'));
+  } else {
+    var evt = window.document.createEvent('UIEvents');
+    evt.initUIEvent('resize', true, false, window, 0);
+    window.dispatchEvent(evt);
+  }
+}
+
 export default defineComponent({
   setup() {
     const { clsPrefix } = useConfig('layout-history-view')
@@ -46,6 +56,7 @@ export default defineComponent({
     const router = useRouter()
     const globalState = useGlobalStore()
     const { routes } = storeToRefs(globalState)
+    const scrollbarRef = ref<Dictionary>({})
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
@@ -120,6 +131,10 @@ export default defineComponent({
 
     onMounted(() => {
       initHistoryRoute()
+
+      window.onresize = function(){
+        console.log(Math.random())
+      }
     })
 
     watch(
@@ -131,6 +146,10 @@ export default defineComponent({
         globalState.$patch({
           cacheViews: cacheData,
         })
+        scrollbarRef.value.update()
+        setTimeout(() => {
+          triggerResize()
+        },500);
       }
     )
 
@@ -143,12 +162,13 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class={clsPrefix}>
+        <ElScrollbar ref={scrollbarRef} always class={clsPrefix}>
           <ElTabs
             v-model={state.activeKey}
             type="card"
             onTab-remove={onTabRemove}
             onTab-click={onTabClick}
+            stretch={false}
           >
             {state.historyData.map((item) => {
               const { meta, path } = item
@@ -162,7 +182,7 @@ export default defineComponent({
               )
             })}
           </ElTabs>
-        </div>
+        </ElScrollbar>
       )
     }
   },
@@ -174,7 +194,22 @@ $prefix: generateClsPrefix('layout-history-view');
 .#{$prefix} {
   background-color: var(--color-light-gray);
   :deep() {
-    .el-tabs__header {
+    .el-tabs__nav-prev,
+    .el-tabs__nav-next {
+      display: none;
+    }
+    .el-scrollbar__wrap {
+      padding-bottom: 10px;
+    }
+    .el-tabs__nav-wrap,
+    .el-tabs__nav-scroll,.el-tabs__content {
+      overflow: initial;
+    }
+    .el-tabs__nav-wrap {
+      padding: 0 0 40px;
+    }
+    .el-tabs__header,
+    .el-tabs__nav-wrap {
       margin-bottom: 0;
     }
     .el-tabs__item.is-active {
