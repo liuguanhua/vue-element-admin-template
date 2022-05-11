@@ -41,11 +41,11 @@ const filterAffixHistory = (routes: TRouteRowArray, basePath = '/') => {
 
 function triggerResize() {
   if (typeof Event === 'function') {
-    window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event('resize'))
   } else {
-    var evt = window.document.createEvent('UIEvents');
-    evt.initUIEvent('resize', true, false, window, 0);
-    window.dispatchEvent(evt);
+    var evt = window.document.createEvent('UIEvents')
+    evt.initUIEvent('resize', true, false, window, 0)
+    window.dispatchEvent(evt)
   }
 }
 
@@ -57,6 +57,7 @@ export default defineComponent({
     const globalState = useGlobalStore()
     const { routes } = storeToRefs(globalState)
     const scrollbarRef = ref<Dictionary>({})
+    const refTabPane = ref<Dictionary>({})
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
@@ -70,6 +71,29 @@ export default defineComponent({
       setStorage(HISTORY_ROUTE_KEY, {
         activeKey: state.activeKey,
       })
+      setTimeout(() => {
+        const tabsItemActive = scrollbarRef.value.$el.querySelector(
+          '.el-tabs__item.is-active'
+        )
+        const scrollMoveWidth =
+          tabsItemActive.offsetLeft + tabsItemActive.offsetWidth
+        const containerWidth = scrollbarRef.value.$el.offsetWidth
+        // console.log(
+        //   scrollMoveWidth,
+        //   containerWidth,
+        //   scrollMoveWidth - containerWidth,
+        //   tabsItemActive.offsetLeft
+        // )
+        const w0 =
+          scrollbarRef.value.$el.querySelector('.el-tabs__nav').clientWidth
+        const w1 = w0 - containerWidth
+        const lastWidth =
+          tabsItemActive.offsetLeft > containerWidth
+            ? scrollMoveWidth - containerWidth
+            : tabsItemActive.offsetLeft
+        console.log(containerWidth, w0, tabsItemActive.offsetLeft, w1)
+        // scrollbarRef.value!.setScrollLeft(lastWidth)
+      }, 100)
       if (
         !route.meta?.title ||
         state.historyData.some((item) => item.path == route.path)
@@ -131,25 +155,17 @@ export default defineComponent({
 
     onMounted(() => {
       initHistoryRoute()
-
-      window.onresize = function(){
-        console.log(Math.random())
-      }
     })
 
     watch(
       () => state.historyData,
       () => {
-        const cacheData = state.historyData
+        const cacheViews = state.historyData
           .filter((item) => !item.noCache && item.name)
           .map((item) => item.name)
         globalState.$patch({
-          cacheViews: cacheData,
+          cacheViews,
         })
-        scrollbarRef.value.update()
-        setTimeout(() => {
-          triggerResize()
-        },500);
       }
     )
 
@@ -160,9 +176,18 @@ export default defineComponent({
       }
     )
 
+    const onScroll = (info) => {
+      console.log('🚀 ~ file: index.vue ~ line 166 ~ onScroll ~ info', info)
+    }
+
     return () => {
       return (
-        <ElScrollbar ref={scrollbarRef} always class={clsPrefix}>
+        <ElScrollbar
+          ref={scrollbarRef}
+          always
+          onScroll={onScroll}
+          class={clsPrefix}
+        >
           <ElTabs
             v-model={state.activeKey}
             type="card"
@@ -177,7 +202,8 @@ export default defineComponent({
                   label={meta.title}
                   name={path}
                   key={path}
-                  closable={!meta.affix}
+                  // closable={!meta.affix}
+                  closable={false}
                 ></ElTabPane>
               )
             })}
@@ -202,7 +228,8 @@ $prefix: generateClsPrefix('layout-history-view');
       padding-bottom: 10px;
     }
     .el-tabs__nav-wrap,
-    .el-tabs__nav-scroll,.el-tabs__content {
+    .el-tabs__nav-scroll,
+    .el-tabs__content {
       overflow: initial;
     }
     .el-tabs__nav-wrap {
@@ -211,6 +238,9 @@ $prefix: generateClsPrefix('layout-history-view');
     .el-tabs__header,
     .el-tabs__nav-wrap {
       margin-bottom: 0;
+    }
+    .el-tabs--card > .el-tabs__header .el-tabs__nav {
+      transform: none !important;
     }
     .el-tabs__item.is-active {
       color: var(--color-primary-0);
