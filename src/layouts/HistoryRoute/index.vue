@@ -205,13 +205,18 @@ export default defineComponent({
               type="card"
               onTab-remove={onTabRemove}
               onTab-click={onTabClick}
+              onTab-contextmenu={openMenu}
               stretch={false}
             >
               {state.historyData.map((item) => {
                 const { meta, path } = item
                 return (
                   <ElTabPane
-                    label={meta.title}
+                    v-slots={{
+                      label: () => {
+                        return <span>{meta.title}</span>
+                      },
+                    }}
                     name={path}
                     key={path}
                     closable={!meta.affix}
