@@ -78,6 +78,24 @@ const componentsRouter: TRouteRow = {
       component: () => import('@/pages/dashboard/index.vue'),
     },
     {
+      path: 'count-to1',
+      name: 'CountToDemo1',
+      meta: { title: 'Count To1' },
+      component: () => import('@/pages/dashboard/index.vue'),
+    },
+    {
+      path: 'count-to2',
+      name: 'CountToDemo2',
+      meta: { title: 'Count To2' },
+      component: () => import('@/pages/dashboard/index.vue'),
+    },
+    {
+      path: 'count-to3',
+      name: 'CountToDemo3',
+      meta: { title: 'Count To3' },
+      component: () => import('@/pages/dashboard/index.vue'),
+    },
+    {
       path: 'mixin',
       name: 'ComponentMixinDemo',
       meta: { title: 'Component Mixin' },

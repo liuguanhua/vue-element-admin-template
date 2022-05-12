@@ -1,9 +1,11 @@
 <script lang="tsx">
 import path from 'path'
-import { defineComponent, watch, reactive, onMounted, toRaw, ref } from 'vue'
+import { defineComponent, watch, reactive, onMounted, ref, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { ElScrollbar, ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
+
+import TabsDropdown from './TabsDropdown.vue'
 
 import { useConfig } from '@/components/hooks'
 import { TRouteRowArray } from '@/types'
@@ -49,6 +51,12 @@ function triggerResize() {
   }
 }
 
+function goScrollTo(el: HTMLDivElement) {
+  return (to: number) => {
+    el.scrollTo({ left: to, behavior: 'smooth' })
+  }
+}
+
 export default defineComponent({
   setup() {
     const { clsPrefix } = useConfig('layout-history-view')
@@ -57,7 +65,6 @@ export default defineComponent({
     const globalState = useGlobalStore()
     const { routes } = storeToRefs(globalState)
     const scrollbarRef = ref<Dictionary>({})
-    const refTabPane = ref<Dictionary>({})
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
@@ -66,34 +73,39 @@ export default defineComponent({
       activeKey: '',
     })
 
+    const moveToTarget = async () => {
+      await nextTick()
+      const currentIndex = state.historyData.findIndex(
+        (item) => item.path == state.activeKey
+      )
+      const $scrollbar = scrollbarRef.value.$el
+      const containerWidth = $scrollbar.offsetWidth
+      const $wrap = $scrollbar.querySelector('.el-scrollbar__wrap')
+      const scrollTo = goScrollTo($wrap)
+      if (currentIndex == 0) {
+        scrollTo(0)
+      } else if (currentIndex == state.historyData.length - 1) {
+        scrollTo($wrap.scrollWidth - containerWidth)
+      } else {
+        const elTabsPane = $wrap.querySelectorAll('.el-tabs__item')
+        const prevTabPane = elTabsPane[currentIndex - 1]
+        const nextTabPane = elTabsPane[currentIndex + 1]
+        const afterNextTabOffsetLeft =
+          nextTabPane.offsetLeft + nextTabPane.offsetWidth + 2
+        const beforePrevTabffsetLeft = prevTabPane.offsetLeft
+        if (afterNextTabOffsetLeft > $wrap.scrollLeft + containerWidth) {
+          scrollTo(afterNextTabOffsetLeft - containerWidth)
+        } else if (beforePrevTabffsetLeft < $wrap.scrollLeft) {
+          scrollTo(beforePrevTabffsetLeft)
+        }
+      }
+    }
+
     const addRoute = () => {
       state.activeKey = route.path as string
       setStorage(HISTORY_ROUTE_KEY, {
         activeKey: state.activeKey,
       })
-      setTimeout(() => {
-        const tabsItemActive = scrollbarRef.value.$el.querySelector(
-          '.el-tabs__item.is-active'
-        )
-        const scrollMoveWidth =
-          tabsItemActive.offsetLeft + tabsItemActive.offsetWidth
-        const containerWidth = scrollbarRef.value.$el.offsetWidth
-        // console.log(
-        //   scrollMoveWidth,
-        //   containerWidth,
-        //   scrollMoveWidth - containerWidth,
-        //   tabsItemActive.offsetLeft
-        // )
-        const w0 =
-          scrollbarRef.value.$el.querySelector('.el-tabs__nav').clientWidth
-        const w1 = w0 - containerWidth
-        const lastWidth =
-          tabsItemActive.offsetLeft > containerWidth
-            ? scrollMoveWidth - containerWidth
-            : tabsItemActive.offsetLeft
-        console.log(containerWidth, w0, tabsItemActive.offsetLeft, w1)
-        // scrollbarRef.value!.setScrollLeft(lastWidth)
-      }, 100)
       if (
         !route.meta?.title ||
         state.historyData.some((item) => item.path == route.path)
@@ -101,9 +113,6 @@ export default defineComponent({
         return
       }
       state.historyData = [...state.historyData, ...[{ ...route }]] // 防止相互影响
-      setStorage(HISTORY_ROUTE_KEY, {
-        historyData: state.historyData.map(({ matched, ...rest }) => rest),
-      })
     }
 
     const onTabClick = (pane: TabsPaneContext) => {
@@ -153,19 +162,29 @@ export default defineComponent({
       }
     }
 
+    const openMenu = (e) => {
+      console.log(e)
+    }
+
     onMounted(() => {
       initHistoryRoute()
+      moveToTarget()
     })
 
     watch(
       () => state.historyData,
-      () => {
+      async () => {
+        setStorage(HISTORY_ROUTE_KEY, {
+          historyData: state.historyData.map(({ matched, ...rest }) => rest),
+        })
         const cacheViews = state.historyData
           .filter((item) => !item.noCache && item.name)
           .map((item) => item.name)
         globalState.$patch({
           cacheViews,
         })
+        await nextTick()
+        triggerResize() //防止滚动条不自动显示隐藏
       }
     )
 
@@ -173,42 +192,37 @@ export default defineComponent({
       () => route.path,
       () => {
         addRoute()
+        moveToTarget()
       }
     )
 
-    const onScroll = (info) => {
-      console.log('🚀 ~ file: index.vue ~ line 166 ~ onScroll ~ info', info)
-    }
-
     return () => {
       return (
-        <ElScrollbar
-          ref={scrollbarRef}
-          always
-          onScroll={onScroll}
-          class={clsPrefix}
-        >
-          <ElTabs
-            v-model={state.activeKey}
-            type="card"
-            onTab-remove={onTabRemove}
-            onTab-click={onTabClick}
-            stretch={false}
-          >
-            {state.historyData.map((item) => {
-              const { meta, path } = item
-              return (
-                <ElTabPane
-                  label={meta.title}
-                  name={path}
-                  key={path}
-                  // closable={!meta.affix}
-                  closable={false}
-                ></ElTabPane>
-              )
-            })}
-          </ElTabs>
-        </ElScrollbar>
+        <>
+          <ElScrollbar ref={scrollbarRef} class={clsPrefix}>
+            <ElTabs
+              v-model={state.activeKey}
+              type="card"
+              onTab-remove={onTabRemove}
+              onTab-click={onTabClick}
+              stretch={false}
+            >
+              {state.historyData.map((item) => {
+                const { meta, path } = item
+                return (
+                  <ElTabPane
+                    label={meta.title}
+                    name={path}
+                    key={path}
+                    closable={!meta.affix}
+                    on-contextmenu={openMenu}
+                  ></ElTabPane>
+                )
+              })}
+            </ElTabs>
+          </ElScrollbar>
+          <TabsDropdown />
+        </>
       )
     }
   },
@@ -218,7 +232,6 @@ export default defineComponent({
 $prefix: generateClsPrefix('layout-history-view');
 
 .#{$prefix} {
-  background-color: var(--color-light-gray);
   :deep() {
     .el-tabs__nav-prev,
     .el-tabs__nav-next {
@@ -239,8 +252,14 @@ $prefix: generateClsPrefix('layout-history-view');
     .el-tabs__nav-wrap {
       margin-bottom: 0;
     }
-    .el-tabs--card > .el-tabs__header .el-tabs__nav {
-      transform: none !important;
+    .el-tabs--card > .el-tabs__header {
+      .el-tabs__nav {
+        transform: none !important;
+      }
+      .el-tabs__item {
+        border-bottom: 1px solid var(--el-border-color-light);
+        background-color: var(--color-light-gray);
+      }
     }
     .el-tabs__item.is-active {
       color: var(--color-primary-0);
