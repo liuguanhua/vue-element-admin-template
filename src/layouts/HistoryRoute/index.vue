@@ -3,12 +3,19 @@ import path from 'path'
 import { defineComponent, watch, reactive, onMounted, ref, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
-import { ElScrollbar, ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
+import {
+  ElIcon,
+  ElScrollbar,
+  ElTabPane,
+  ElTabs,
+  TabsPaneContext,
+} from 'element-plus'
+import { Close } from '@element-plus/icons-vue'
 
 import TabsDropdown from './TabsDropdown.vue'
 
 import { useConfig } from '@/components/hooks'
-import { TRouteRowArray } from '@/types'
+import { TRouteRow, TRouteRowArray } from '@/types'
 import { useGlobalStore } from '@/store/modules/global'
 import {
   DEFAULT_ROUTE,
@@ -68,9 +75,15 @@ export default defineComponent({
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
+      visible: boolean
+      left: number
+      top: number
     }>({
       historyData: [],
       activeKey: '',
+      visible: false,
+      left: 0,
+      top: 0,
     })
 
     const moveToTarget = async () => {
@@ -162,8 +175,22 @@ export default defineComponent({
       }
     }
 
-    const openMenu = (e) => {
-      console.log(e)
+    const openMenu = (routeItem: Dictionary) => {
+      return (e: MouseEvent) => {
+        e.preventDefault()
+        const target = e.currentTarget as HTMLSpanElement
+        const menuMinWidth = 105
+        const offsetLeft = target.getBoundingClientRect().left
+        const offsetWidth = target.offsetWidth
+        const maxLeft = offsetWidth - menuMinWidth
+        const left = e.clientX - offsetLeft + 15
+        console.log(left)
+        state.left = left > maxLeft ? maxLeft : left
+        state.top = e.clientY
+        state.visible = true
+        console.log('🚀 ~ file: index.vue ~ line 192 ~ return ~ state', state)
+        // this.selectedTag = tag
+      }
     }
 
     onMounted(() => {
@@ -203,9 +230,8 @@ export default defineComponent({
             <ElTabs
               v-model={state.activeKey}
               type="card"
-              onTab-remove={onTabRemove}
+              // onTab-remove={onTabRemove}
               onTab-click={onTabClick}
-              onTab-contextmenu={openMenu}
               stretch={false}
             >
               {state.historyData.map((item) => {
@@ -214,19 +240,43 @@ export default defineComponent({
                   <ElTabPane
                     v-slots={{
                       label: () => {
-                        return <span>{meta.title}</span>
+                        return (
+                          <span
+                            onContextmenu={openMenu(item)}
+                            class="inline-block vat h-100"
+                          >
+                            <span>{meta.title}</span>
+                            <ElIcon
+                              class={[
+                                'is-icon-close',
+                                {
+                                  'is-closable': !meta.affix,
+                                },
+                              ]}
+                              {...{
+                                onClick: (e: MouseEvent) => {
+                                  e.stopPropagation()
+                                  onTabRemove(path)
+                                },
+                              }}
+                            >
+                              <Close />
+                            </ElIcon>
+                          </span>
+                        )
                       },
                     }}
                     name={path}
                     key={path}
                     closable={!meta.affix}
-                    on-contextmenu={openMenu}
                   ></ElTabPane>
                 )
               })}
             </ElTabs>
           </ElScrollbar>
-          <TabsDropdown />
+          <div class="contextmenu">
+            <TabsDropdown />
+          </div>
         </>
       )
     }
@@ -238,6 +288,16 @@ $prefix: generateClsPrefix('layout-history-view');
 
 .#{$prefix} {
   :deep() {
+    .contextmenu {
+      margin: 0;
+      background: #fff;
+      z-index: 1;
+      position: absolute;
+      padding: 5px 0;
+      border-radius: 5px;
+      color: #333;
+    }
+
     .el-tabs__nav-prev,
     .el-tabs__nav-next {
       display: none;
@@ -264,6 +324,19 @@ $prefix: generateClsPrefix('layout-history-view');
       .el-tabs__item {
         border-bottom: 1px solid var(--el-border-color-light);
         background-color: var(--color-light-gray);
+        padding: 0;
+        > span {
+          padding: 0 20px;
+          + .is-icon-close {
+            display: none;
+          }
+        }
+      }
+      .el-tabs__item.is-active {
+        border-bottom-color: var(--color-light-gray);
+      }
+      .is-icon-close svg {
+        margin-top: 0;
       }
     }
     .el-tabs__item.is-active {
