@@ -71,7 +71,8 @@ export default defineComponent({
     const router = useRouter()
     const globalState = useGlobalStore()
     const { routes } = storeToRefs(globalState)
-    const scrollbarRef = ref<Dictionary>({})
+    const refScrollbar = ref<Dictionary>({})
+    const refTabsDropdown = ref<Dictionary>({})
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
@@ -91,7 +92,7 @@ export default defineComponent({
       const currentIndex = state.historyData.findIndex(
         (item) => item.path == state.activeKey
       )
-      const $scrollbar = scrollbarRef.value.$el
+      const $scrollbar = refScrollbar.value.$el
       const containerWidth = $scrollbar.offsetWidth
       const $wrap = $scrollbar.querySelector('.el-scrollbar__wrap')
       const scrollTo = goScrollTo($wrap)
@@ -178,17 +179,16 @@ export default defineComponent({
     const openMenu = (routeItem: Dictionary) => {
       return (e: MouseEvent) => {
         e.preventDefault()
-        const target = e.currentTarget as HTMLSpanElement
-        const menuMinWidth = 105
+        const target = refScrollbar.value.$el
+        const menuMinWidth = 100
         const offsetLeft = target.getBoundingClientRect().left
         const offsetWidth = target.offsetWidth
         const maxLeft = offsetWidth - menuMinWidth
         const left = e.clientX - offsetLeft + 15
-        console.log(left)
+        console.log(e.clientX, offsetLeft)
         state.left = left > maxLeft ? maxLeft : left
         state.top = e.clientY
-        state.visible = true
-        console.log('🚀 ~ file: index.vue ~ line 192 ~ return ~ state', state)
+        refTabsDropdown.value.toggle()
         // this.selectedTag = tag
       }
     }
@@ -226,7 +226,7 @@ export default defineComponent({
     return () => {
       return (
         <>
-          <ElScrollbar ref={scrollbarRef} class={clsPrefix}>
+          <ElScrollbar ref={refScrollbar} class={clsPrefix}>
             <ElTabs
               v-model={state.activeKey}
               type="card"
@@ -274,8 +274,15 @@ export default defineComponent({
               })}
             </ElTabs>
           </ElScrollbar>
-          <div class="contextmenu">
-            <TabsDropdown />
+          <div
+            style={{
+              left: `${state.left}px`,
+              top: `${state.top}px`,
+            }}
+            // v-show={state.visible}
+            class="contextmenu"
+          >
+            <TabsDropdown ref={refTabsDropdown} />
           </div>
         </>
       )
@@ -288,16 +295,6 @@ $prefix: generateClsPrefix('layout-history-view');
 
 .#{$prefix} {
   :deep() {
-    .contextmenu {
-      margin: 0;
-      background: #fff;
-      z-index: 1;
-      position: absolute;
-      padding: 5px 0;
-      border-radius: 5px;
-      color: #333;
-    }
-
     .el-tabs__nav-prev,
     .el-tabs__nav-next {
       display: none;
@@ -346,5 +343,16 @@ $prefix: generateClsPrefix('layout-history-view');
       border-bottom-color: var(--color-light-gray);
     }
   }
+}
+
+.contextmenu {
+  margin: 0;
+  z-index: 2;
+  position: absolute;
+  padding: 5px 0;
+  border-radius: 5px;
+  color: #333;
+  width: 100px;
+  height: 100px;
 }
 </style>
