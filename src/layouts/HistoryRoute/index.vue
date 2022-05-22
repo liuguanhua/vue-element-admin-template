@@ -3,16 +3,9 @@ import path from 'path'
 import { defineComponent, watch, reactive, onMounted, ref, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
-import {
-  ElIcon,
-  ElScrollbar,
-  ElTabPane,
-  ElTabs,
-  TabsPaneContext,
-} from 'element-plus'
-import { Close } from '@element-plus/icons-vue'
+import { ElScrollbar, ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
 
-import TabsDropdown from './TabsDropdown.vue'
+import TabsContextMenu from './TabsContextMenu.vue'
 
 import { useConfig } from '@/components/hooks'
 import { TRouteRow, TRouteRowArray } from '@/types'
@@ -25,6 +18,8 @@ import {
   HISTORY_ROUTE_KEY,
   isVaildArray,
 } from '@/scripts'
+import { ElSvgIcon } from '@/components/common'
+import { EContextMenuOperates } from '@/types/enum.d'
 
 const filterAffixHistory = (routes: TRouteRowArray, basePath = '/') => {
   let data: Dictionary[] = []
@@ -72,19 +67,21 @@ export default defineComponent({
     const globalState = useGlobalStore()
     const { routes } = storeToRefs(globalState)
     const refScrollbar = ref<Dictionary>({})
-    const refTabsDropdown = ref<Dictionary>({})
+    const refTabsContextMenu = ref<Dictionary>({})
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
       visible: boolean
       left: number
       top: number
+      curHistory: Dictionary
     }>({
       historyData: [],
       activeKey: '',
       visible: false,
       left: 0,
       top: 0,
+      curHistory: {},
     })
 
     const moveToTarget = async () => {
@@ -185,11 +182,30 @@ export default defineComponent({
         const offsetWidth = target.offsetWidth
         const maxLeft = offsetWidth - menuMinWidth
         const left = e.clientX - offsetLeft + 15
-        console.log(e.clientX, offsetLeft)
         state.left = left > maxLeft ? maxLeft : left
         state.top = e.clientY
-        refTabsDropdown.value.toggle()
-        // this.selectedTag = tag
+        state.visible = true
+        state.curHistory = routeItem
+      }
+    }
+
+    const closeMenu = () => {
+      state.visible = false
+    }
+
+    const onSelect = (index: string) => {
+      switch (index) {
+        case EContextMenuOperates.refresh:
+          router.replace({
+            path: '/redirect' + state.curHistory.fullPath,
+          })
+          break
+        case EContextMenuOperates.close:
+          onTabRemove(state.curHistory.path)
+          break
+
+        default:
+          break
       }
     }
 
@@ -223,6 +239,17 @@ export default defineComponent({
       }
     )
 
+    watch(
+      () => state.visible,
+      (value) => {
+        if (value) {
+          document.body.addEventListener('click', closeMenu)
+        } else {
+          document.body.removeEventListener('click', closeMenu)
+        }
+      }
+    )
+
     return () => {
       return (
         <>
@@ -246,7 +273,8 @@ export default defineComponent({
                             class="inline-block vat h-100"
                           >
                             <span>{meta.title}</span>
-                            <ElIcon
+                            <ElSvgIcon
+                              name="Close"
                               class={[
                                 'is-icon-close',
                                 {
@@ -259,9 +287,7 @@ export default defineComponent({
                                   onTabRemove(path)
                                 },
                               }}
-                            >
-                              <Close />
-                            </ElIcon>
+                            ></ElSvgIcon>
                           </span>
                         )
                       },
@@ -274,16 +300,15 @@ export default defineComponent({
               })}
             </ElTabs>
           </ElScrollbar>
-          <div
+          <TabsContextMenu
+            onSelect={onSelect}
+            v-show={state.visible}
             style={{
               left: `${state.left}px`,
               top: `${state.top}px`,
             }}
-            // v-show={state.visible}
-            class="contextmenu"
-          >
-            <TabsDropdown ref={refTabsDropdown} />
-          </div>
+            ref={refTabsContextMenu}
+          />
         </>
       )
     }
@@ -343,16 +368,5 @@ $prefix: generateClsPrefix('layout-history-view');
       border-bottom-color: var(--color-light-gray);
     }
   }
-}
-
-.contextmenu {
-  margin: 0;
-  z-index: 2;
-  position: absolute;
-  padding: 5px 0;
-  border-radius: 5px;
-  color: #333;
-  width: 100px;
-  height: 100px;
 }
 </style>

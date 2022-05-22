@@ -19,7 +19,7 @@ export default defineComponent({
       let matched: any = route.matched.filter(
         (item) => item.meta?.title && item.meta?.breadcrumb !== false
       )
-      const [firstRoute] = matched
+      const [firstRoute = {}] = matched
       //第一个路由是否为默认页
       if (firstRoute.name !== DEFAULT_ROUTE.name) {
         matched = [

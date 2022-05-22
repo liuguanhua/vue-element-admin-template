@@ -3,23 +3,15 @@ import { defineComponent } from 'vue'
 import { storeToRefs } from 'pinia'
 import { RouterLink } from 'vue-router'
 import {
-  ElIcon,
   ElHeader,
   ElDropdown,
   ElDropdownMenu,
   ElDropdownItem,
   ElBadge,
 } from 'element-plus'
-import {
-  Expand,
-  Fold,
-  Setting,
-  UserFilled,
-  BellFilled,
-} from '@element-plus/icons-vue'
 
 import Breadcrumb from './Breadcrumb.vue'
-import { SvgIcon } from '@/components/common'
+import { ElSvgIcon, SvgIcon } from '@/components/common'
 
 import { useConfig } from '@/components/hooks'
 import { useGlobalStore } from '@/store/modules/global'
@@ -44,9 +36,10 @@ export default defineComponent({
         <ElHeader layout-align="space-between center" class={`${clsPrefix}`}>
           <div layout-align="start center">
             <span class="m-r-10" onClick={toggleCollapsed}>
-              <ElIcon class="color-dark-0 hover-color-primary-0 font-size-24 cursign vam">
-                {collapse.value ? <Expand /> : <Fold />}
-              </ElIcon>
+              <ElSvgIcon
+                name={collapse.value ? 'Expand' : 'Fold'}
+                class="color-dark-0 hover-color-primary-0 font-size-24 cursign vam"
+              ></ElSvgIcon>
             </span>
             <Breadcrumb />
           </div>
@@ -62,13 +55,15 @@ export default defineComponent({
                 name="github"
               />
             </a>
-            <ElIcon class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 cursign">
-              <Setting />
-            </ElIcon>
+            <ElSvgIcon
+              name="Setting"
+              class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 cursign"
+            ></ElSvgIcon>
             <ElBadge isDot>
-              <ElIcon class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 cursign">
-                <BellFilled />
-              </ElIcon>
+              <ElSvgIcon
+                name="BellFilled"
+                class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 cursign"
+              ></ElSvgIcon>
             </ElBadge>
             <ElDropdown
               class="cursign"
@@ -87,9 +82,10 @@ export default defineComponent({
                 },
               }}
             >
-              <ElIcon class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 vam">
-                <UserFilled />
-              </ElIcon>
+              <ElSvgIcon
+                name="UserFilled"
+                class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 vam"
+              ></ElSvgIcon>
               <span class="ellipsis inline-block vam m-l-14">{name.value}</span>
               <img
                 class="avatar bdr-half vam m-l-14"

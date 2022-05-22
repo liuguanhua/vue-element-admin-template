@@ -171,6 +171,17 @@ const componentsRouter1 = {
 
 const routes: TRouteRowArray = [
   {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/pages/redirect/index.vue'),
+      },
+    ],
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
