@@ -51,6 +51,9 @@ export default defineComponent({
     watch(
       () => route.path,
       () => {
+        if (route.path.startsWith('/redirect/')) {
+          return
+        }
         getBreadcrumb()
       }
     )

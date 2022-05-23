@@ -89,6 +89,9 @@ export default defineComponent({
       const currentIndex = state.historyData.findIndex(
         (item) => item.path == state.activeKey
       )
+      if (currentIndex < 0) {
+        return
+      }
       const $scrollbar = refScrollbar.value.$el
       const containerWidth = $scrollbar.offsetWidth
       const $wrap = $scrollbar.querySelector('.el-scrollbar__wrap')
