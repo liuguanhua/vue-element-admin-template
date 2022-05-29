@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { ElMenu, ElMenuItem, ElDivider } from 'element-plus'
 
 import { EContextMenuOperates } from '@/types/enum.d'

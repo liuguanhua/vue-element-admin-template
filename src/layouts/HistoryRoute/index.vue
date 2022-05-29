@@ -1,6 +1,15 @@
 <script lang="tsx">
 import path from 'path'
-import { defineComponent, watch, reactive, onMounted, ref, nextTick } from 'vue'
+import { pathToRegexp, parse } from 'path-to-regexp'
+import {
+  defineComponent,
+  watch,
+  reactive,
+  onMounted,
+  ref,
+  nextTick,
+  unref,
+} from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { ElScrollbar, ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
@@ -8,7 +17,7 @@ import { ElScrollbar, ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
 import TabsContextMenu from './TabsContextMenu.vue'
 
 import { useConfig } from '@/components/hooks'
-import { TRouteRow, TRouteRowArray } from '@/types'
+import { TRouteRowArray } from '@/types'
 import { useGlobalStore } from '@/store/modules/global'
 import {
   DEFAULT_ROUTE,
@@ -21,26 +30,67 @@ import {
 import { ElSvgIcon } from '@/components/common'
 import { EContextMenuOperates } from '@/types/enum.d'
 
-const filterAffixHistory = (routes: TRouteRowArray, basePath = '/') => {
-  let data: Dictionary[] = []
+const flatRoutesData = (routes: TRouteRowArray, basePath = '/') => {
+  let affixRoutes: Dictionary[] = []
+  let allRoutes: Dictionary[] = []
   routes.forEach((route) => {
-    if (route.meta && route.meta.affix) {
-      const routePath = path.resolve(basePath, route.path)
-      data.push({
+    const newPath =
+      DEFAULT_ROUTE.path == route.path ? '/' + route.path : route.path
+    const routePath = (basePath == '/' ? '' : basePath + '/') + newPath //path.resolve(basePath, route.path)
+    if (route.meta) {
+      const info = {
         fullPath: routePath,
         path: routePath,
         name: route.name,
         meta: { ...route.meta },
-      })
+      }
+      route.meta.affix && affixRoutes.push(info)
+      allRoutes.push(info)
     }
     if (route.children) {
-      const tempHistory = filterAffixHistory(route.children, route.path)
-      if (tempHistory.length >= 1) {
-        data = [...data, ...tempHistory]
+      const { affixRoutes: tempAffixRoutes, allRoutes: tempAllRoutes } =
+        flatRoutesData(route.children, routePath)
+      if (tempAffixRoutes.length >= 1) {
+        affixRoutes = [...affixRoutes, ...tempAffixRoutes]
+      }
+      if (tempAllRoutes.length >= 1) {
+        allRoutes = [...allRoutes, ...tempAllRoutes]
       }
     }
   })
-  return data
+  return {
+    affixRoutes,
+    allRoutes,
+  }
+}
+
+const matchStoreRoutes = (data, allRoutes) => {
+  const list = data.reduce((result, item) => {
+    const { name, meta, path: routePath } = item
+    if (name && meta?.title) {
+      const itemRoute = allRoutes.find((cur) => {
+        return cur.path == routePath || pathToRegexp(cur.path).exec(routePath)
+      })
+      const paths = result.map((cur) => cur.path)
+      if (itemRoute && !paths.includes(itemRoute.path)) {
+        //更新路由信息
+        result.push({
+          ...item,
+          ...itemRoute,
+          path: item.path,
+        })
+      }
+    }
+    return result
+  }, [])
+  const beforePaths = list
+    .filter((item) => item.meta?.affix)
+    .map((item) => item.path)
+  const filterAffixRoutes = allRoutes.filter((item) => {
+    return item.meta?.affix && !beforePaths.includes(item.path)
+  })
+  console.log(list, filterAffixRoutes)
+  return [...filterAffixRoutes, ...list]
 }
 
 function triggerResize() {
@@ -141,13 +191,7 @@ export default defineComponent({
       })
     }
 
-    const onTabRemove = (paneName: string | number) => {
-      state.historyData = state.historyData.filter(
-        (item) => item.path !== paneName
-      )
-      if (paneName !== route.path) {
-        return
-      }
+    const toLastRoute = () => {
       let activeRoute = state.historyData.slice(-1)[0]
       if (!activeRoute) {
         activeRoute = { ...DEFAULT_ROUTE, path: `/${DEFAULT_ROUTE.path}` }
@@ -159,15 +203,28 @@ export default defineComponent({
       })
     }
 
+    const onTabRemove = (paneName: string | number) => {
+      state.historyData = state.historyData.filter(
+        (item) => item.path !== paneName
+      )
+      if (paneName !== route.path) {
+        return
+      }
+      toLastRoute()
+    }
+
     const initHistoryRoute = () => {
       const storeHistoryRoute = getStorage(HISTORY_ROUTE_KEY)
+      const { allRoutes, affixRoutes } = flatRoutesData(routes.value)
       if (!storeHistoryRoute || !isVaildArray(storeHistoryRoute.historyData)) {
-        state.historyData = filterAffixHistory(routes.value)
+        state.historyData = affixRoutes
         addRoute()
       } else {
-        state.historyData = storeHistoryRoute.historyData.filter(
-          (item) => item.name && item.meta?.title
+        state.historyData = matchStoreRoutes(
+          storeHistoryRoute.historyData,
+          allRoutes
         )
+        console.log(2)
         state.activeKey = state.historyData.some(
           (item) => item.path == storeHistoryRoute.activeKey
         )
@@ -189,6 +246,10 @@ export default defineComponent({
         state.top = e.clientY
         state.visible = true
         state.curHistory = routeItem
+        console.log(
+          '🚀 ~ file: index.vue ~ line 249 ~ return ~ routeItem',
+          routeItem
+        )
       }
     }
 
@@ -206,7 +267,22 @@ export default defineComponent({
         case EContextMenuOperates.close:
           onTabRemove(state.curHistory.path)
           break
-
+        case EContextMenuOperates.other:
+          router.push(state.curHistory)
+          state.historyData = state.historyData.filter((item) => {
+            return item.meta.affix || item.path == state.curHistory.path
+          })
+          break
+        case EContextMenuOperates.all:
+          state.historyData = state.historyData.filter((item) => {
+            return item.meta.affix
+          })
+          if (
+            state.historyData.some((item) => item.path == state.curHistory.path)
+          ) {
+            return
+          }
+          toLastRoute()
         default:
           break
       }
@@ -223,9 +299,12 @@ export default defineComponent({
         setStorage(HISTORY_ROUTE_KEY, {
           historyData: state.historyData.map(({ matched, ...rest }) => rest),
         })
-        const cacheViews = state.historyData
-          .filter((item) => !item.noCache && item.name)
-          .map((item) => item.name)
+        const cacheViews = state.historyData.reduce((result, item) => {
+          if (!item.noCache && item.name && !result.includes(item.name)) {
+            result.push(item.name)
+          }
+          return result
+        }, []) as string[]
         globalState.$patch({
           cacheViews,
         })
