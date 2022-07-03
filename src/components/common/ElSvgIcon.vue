@@ -1,20 +1,26 @@
 <script lang="tsx">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { ElIcon } from 'element-plus'
 import * as ElSvg from '@element-plus/icons-vue'
 
 export default defineComponent({
+  extends: ElIcon,
   props: {
     name: {
       type: String,
       required: true,
       default: '',
     },
+    onClick: Function as PropType<(e: MouseEvent) => void>,
   },
-  setup(props) {
+  setup(props, { attrs }) {
     const { name } = props
     return () => {
-      return <ElIcon>{ElSvg[name]?.render()}</ElIcon>
+      return (
+        <ElIcon {...attrs} {...props}>
+          {ElSvg[name]?.render()}
+        </ElIcon>
+      )
     }
   },
 })

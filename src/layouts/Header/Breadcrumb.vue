@@ -1,12 +1,13 @@
 <script lang="tsx">
 import { defineComponent, ref, onMounted, watch, TransitionGroup } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElBreadcrumbItem } from 'element-plus'
 import { compile } from 'path-to-regexp'
 import { useRoute, useRouter } from 'vue-router'
 
 import { TRouteRow, TRouteRowArray } from '@/types'
 import { DEFAULT_ROUTE } from '@/scripts/constant'
 import { useConfig } from '@/components/hooks'
+import { BegetElBreadcrumb } from '@/components/common'
 
 export default defineComponent({
   setup() {
@@ -60,7 +61,7 @@ export default defineComponent({
 
     return () => {
       return (
-        <ElBreadcrumb class={`${clsPrefix}-breadcrumb`} separator="/">
+        <BegetElBreadcrumb class={`${clsPrefix}-breadcrumb`} separator="/">
           <TransitionGroup name="breadcrumb">
             {breadcrumbList.value.map((item, index) => {
               const { path, redirect, meta = {} } = item
@@ -76,7 +77,7 @@ export default defineComponent({
               )
             })}
           </TransitionGroup>
-        </ElBreadcrumb>
+        </BegetElBreadcrumb>
       )
     }
   },
@@ -89,7 +90,7 @@ $prefix: generateClsPrefix('layout-header');
   &-breadcrumb {
     .el-breadcrumb__inner a,
     .el-breadcrumb__inner.is-link {
-      color: var(--color-dark-0);
+      // color: var(--color-dark-0);
       font-weight: normal;
       &:hover {
         color: var(--color-primary-0);

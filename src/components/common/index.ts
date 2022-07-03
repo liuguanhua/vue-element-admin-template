@@ -1,4 +1,7 @@
 import SvgIcon from './SvgIcon.vue'
 import ElSvgIcon from './ElSvgIcon.vue'
+import ThemeProvide from './ThemeProvide.vue'
 
-export { SvgIcon, ElSvgIcon }
+export * from './GlobalWidget.vue'
+
+export { SvgIcon, ElSvgIcon, ThemeProvide }

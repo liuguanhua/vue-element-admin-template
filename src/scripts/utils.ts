@@ -1,4 +1,5 @@
 import store from 'store'
+import { WEB_CONFIG } from './constant'
 
 export function replaceState(oldState: Dictionary, newState: Dictionary) {
   const result = Object.assign({}, oldState, newState)
@@ -58,10 +59,28 @@ export function isUndefined(value: any): value is undefined {
   return typeof value === 'undefined'
 }
 
+export function isString(value: any): value is string {
+  return typeof value === 'string'
+}
+
+export function isBoolean(value: any): value is boolean {
+  return typeof value === 'boolean'
+}
+
 export function isArray(value: any): value is Array<any> {
   return Array.isArray(value)
 }
 
 export function isVaildArray(value: any): boolean {
   return isArray(value) && Boolean(value.length)
+}
+
+export const replaceDoubleQuotes = (str: string = '') => str.replace(/"/g, '')
+
+export const setWebConfigStore = (value: Dictionary = {}) => {
+  return setStorage(WEB_CONFIG, value)
+}
+
+export const getWebConfigStore = () => {
+  return getStorage(WEB_CONFIG)
 }

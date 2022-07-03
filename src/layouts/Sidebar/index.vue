@@ -8,6 +8,7 @@ import Menu from '../Menu/index.vue'
 
 import { useConfig } from '@/components/hooks'
 import { useGlobalStore } from '@/store/modules/global'
+import { BegetElAside, BegetThemeContainer } from '@/components/common'
 
 export default defineComponent({
   setup() {
@@ -23,7 +24,7 @@ export default defineComponent({
           {isFixedSidebar.value && (
             <div layout-flex="none" style={{ width }}></div>
           )}
-          <ElAside
+          <BegetElAside
             class={[
               { [`${clsPrefix}-fixed`]: isFixedSidebar.value },
               clsPrefix,
@@ -34,15 +35,15 @@ export default defineComponent({
             width={width}
           >
             <RouterLink class={`${clsPrefix}-title block`} to="/">
-              <div layout-align="center center">
-                <img class={`${clsPrefix}-logo`} src={logo} alt={title} />
-                <h3 class="text-uppercase color-white m-l-12 ellipsis r-m-p">
-                  {title}
-                </h3>
-              </div>
+              <BegetThemeContainer showThemeBgColor showThemeColor>
+                <div layout-align="center center">
+                  <img class={`${clsPrefix}-logo`} src={logo} alt={title} />
+                  <h3 class="text-uppercase m-l-12 ellipsis r-m-p">{title}</h3>
+                </div>
+              </BegetThemeContainer>
             </RouterLink>
             <Menu />
-          </ElAside>
+          </BegetElAside>
         </>
       )
     }
@@ -53,7 +54,7 @@ export default defineComponent({
 $prefix: generateClsPrefix('layout-aside');
 
 .#{$prefix} {
-  background-color: var(--color-dark-0);
+  // background-color: var(--color-dark-0);
   transition: width 0.2s;
   &-title > div {
     height: $sideLogoHeight;

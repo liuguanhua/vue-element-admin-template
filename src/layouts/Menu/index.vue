@@ -8,18 +8,13 @@ import MenuItem from './MenuItem.vue'
 
 import { useGlobalStore } from '@/store/modules/global'
 import { useConfig } from '@/components/hooks'
+import { BegetElMenu } from '@/components/common'
 
 export default defineComponent({
   setup() {
     const route = useRoute()
     const globalState = useGlobalStore()
-    const {
-      clsPrefix,
-      sideLogoHeight,
-      menuSideBgColor,
-      menuTextColor,
-      menuActiveTextColor,
-    } = useConfig('layout-aside')
+    const { clsPrefix, sideLogoHeight } = useConfig('layout-aside')
     const { routes, collapse } = storeToRefs(globalState)
 
     const activeMenu = computed(() => {
@@ -38,18 +33,15 @@ export default defineComponent({
           }}
           class={`${clsPrefix}-menu`}
         >
-          <ElMenu
-            backgroundColor={menuSideBgColor}
+          <BegetElMenu
             defaultActive={activeMenu.value}
             collapse={collapse.value}
-            textColor={menuTextColor}
-            activeTextColor={menuActiveTextColor}
             collapseTransition={false}
           >
             {routes.value.map((route) => (
               <MenuItem key={route.path} level={1} route={route} />
             ))}
-          </ElMenu>
+          </BegetElMenu>
         </ElScrollbar>
       )
     }
@@ -83,7 +75,7 @@ $prefix: generateClsPrefix('layout-aside');
     .el-sub-menu__title:hover {
       .sider-menu-title,
       .el-sub-menu__icon-arrow {
-        color: var(--color-white);
+        // color: var(--color-white);
       }
     }
     .el-sub-menu {

@@ -38,7 +38,7 @@ const componentsRouter: TRouteRow = {
     {
       path: 'markdown',
       name: 'MarkdownDemo',
-      meta: { title: 'Markdown' },
+      meta: { title: 'Markdown', affix: true },
       component: () => import('@/pages/markdown/index.vue'),
     },
     {

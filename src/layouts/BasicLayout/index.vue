@@ -10,46 +10,57 @@ import HistoryRoute from '../HistoryRoute/index.vue'
 
 import { useGlobalStore } from '@/store/modules/global'
 import { useConfig } from '@/components/hooks'
+import { ThemeProvide } from '@/components/common'
 
 export default defineComponent({
   setup() {
-    const { clsPrefix } = useConfig('layout-header-view')
+    const { clsPrefix, menuSideFoldWidth, menuSideWidth } =
+      useConfig('layout-header-view')
     const globalStore = useGlobalStore()
-    const { cacheViews, isFixedHeader } = storeToRefs(globalStore)
+    const { cacheViews, isFixedHeader, collapse } = storeToRefs(globalStore)
     const route = useRoute()
     const key = computed(() => route.fullPath)
     return () => {
+      const width = collapse.value ? menuSideFoldWidth : menuSideWidth
       return (
         <ElContainer class="min-h-100">
-          <Sidebar />
-          <ElContainer>
-            {isFixedHeader.value && <div style={{ height: '101px' }}></div>}
-            <div
-              class={[
-                clsPrefix,
-                { [`${clsPrefix}-fixed`]: isFixedHeader.value },
-              ]}
-            >
-              <Header />
-              <HistoryRoute />
-            </div>
-            <ElMain>
-              <RouterView>
-                {{
-                  default: ({ Component }) => {
-                    return (
-                      <Transition appear name="fade-transform" mode="out-in">
-                        <KeepAlive include={cacheViews.value}>
-                          <Component key={key.value} />
-                        </KeepAlive>
-                      </Transition>
-                    )
+          <ThemeProvide>
+            <Sidebar />
+            <ElContainer>
+              {isFixedHeader.value && <div style={{ height: '101px' }}></div>}
+              <div
+                class={[
+                  clsPrefix,
+                  { [`${clsPrefix}-fixed`]: isFixedHeader.value },
+                ]}
+                {...(isFixedHeader.value && {
+                  style: {
+                    width: `calc(100% - ${width})`,
                   },
-                }}
-              </RouterView>
-            </ElMain>
-            <ElFooter></ElFooter>
-          </ElContainer>
+                })}
+                style={{ height: '' }}
+              >
+                <Header />
+                <HistoryRoute />
+              </div>
+              <ElMain>
+                <RouterView>
+                  {{
+                    default: ({ Component }) => {
+                      return (
+                        <Transition appear name="fade-transform" mode="out-in">
+                          <KeepAlive include={cacheViews.value}>
+                            <Component key={key.value} />
+                          </KeepAlive>
+                        </Transition>
+                      )
+                    },
+                  }}
+                </RouterView>
+              </ElMain>
+              <ElFooter></ElFooter>
+            </ElContainer>
+          </ThemeProvide>
         </ElContainer>
       )
     }
@@ -62,7 +73,6 @@ $prefix: generateClsPrefix('layout-header-view');
 .#{$prefix} {
   &-fixed {
     position: fixed;
-    width: calc(100% - $menuSideWidth);
   }
 }
 </style>

@@ -9,14 +9,7 @@ export default defineComponent({
 
     onBeforeMount(() => {
       const { params, query } = route
-      console.log(
-        '🚀 ~ file: index.vue ~ line 12 ~ onBeforeMount ~ route',
-        route.path,
-        route.fullPath,
-        params
-      )
       const { path } = params
-      console.log('🚀 ~ file: index.vue ~ line 13 ~ onBeforeMount ~ path', path)
       router.replace({ path: '/' + path, query })
     })
 

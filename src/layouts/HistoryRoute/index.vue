@@ -1,15 +1,6 @@
 <script lang="tsx">
-import path from 'path'
-import { pathToRegexp, parse } from 'path-to-regexp'
-import {
-  defineComponent,
-  watch,
-  reactive,
-  onMounted,
-  ref,
-  nextTick,
-  unref,
-} from 'vue'
+import { pathToRegexp } from 'path-to-regexp'
+import { defineComponent, watch, reactive, onMounted, ref, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { ElScrollbar, ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
@@ -78,6 +69,7 @@ const matchStoreRoutes = (data, allRoutes) => {
           ...item,
           ...itemRoute,
           path: item.path,
+          fullPath: item.fullPath,
         })
       }
     }
@@ -89,7 +81,6 @@ const matchStoreRoutes = (data, allRoutes) => {
   const filterAffixRoutes = allRoutes.filter((item) => {
     return item.meta?.affix && !beforePaths.includes(item.path)
   })
-  console.log(list, filterAffixRoutes)
   return [...filterAffixRoutes, ...list]
 }
 
@@ -117,7 +108,6 @@ export default defineComponent({
     const globalState = useGlobalStore()
     const { routes } = storeToRefs(globalState)
     const refScrollbar = ref<Dictionary>({})
-    const refTabsContextMenu = ref<Dictionary>({})
     const state = reactive<{
       historyData: Dictionary[]
       activeKey: string
@@ -224,7 +214,6 @@ export default defineComponent({
           storeHistoryRoute.historyData,
           allRoutes
         )
-        console.log(2)
         state.activeKey = state.historyData.some(
           (item) => item.path == storeHistoryRoute.activeKey
         )
@@ -246,10 +235,6 @@ export default defineComponent({
         state.top = e.clientY
         state.visible = true
         state.curHistory = routeItem
-        console.log(
-          '🚀 ~ file: index.vue ~ line 249 ~ return ~ routeItem',
-          routeItem
-        )
       }
     }
 
@@ -278,11 +263,25 @@ export default defineComponent({
             return item.meta.affix
           })
           if (
-            state.historyData.some((item) => item.path == state.curHistory.path)
+            state.historyData.some(
+              (item) =>
+                item.path == state.curHistory.path &&
+                state.curHistory.path == route.path
+            )
           ) {
             return
           }
           toLastRoute()
+        case EContextMenuOperates.left:
+        case EContextMenuOperates.right:
+          const isCloseLeft = index == EContextMenuOperates.left
+          const curIndex = state.historyData.findIndex(
+            (item) => item.path == state.curHistory.path
+          )
+          state.historyData = state.historyData.filter((item, key) => {
+            const diff = isCloseLeft ? key >= curIndex : key <= curIndex
+            return item.meta.affix || item.path == route.path || diff
+          })
         default:
           break
       }
@@ -389,7 +388,6 @@ export default defineComponent({
               left: `${state.left}px`,
               top: `${state.top}px`,
             }}
-            ref={refTabsContextMenu}
           />
         </>
       )

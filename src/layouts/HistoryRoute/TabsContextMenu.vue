@@ -1,16 +1,18 @@
 <script lang="tsx">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 import { ElMenu, ElMenuItem, ElDivider } from 'element-plus'
 
 import { EContextMenuOperates } from '@/types/enum.d'
 
 import { ElSvgIcon } from '@/components/common'
 
-export default defineComponent({
+type Props = InstanceType<typeof ElMenu>['$props']
+
+export default defineComponent<Props>({
   setup() {
     return () => {
       return (
-        <ElMenu class="contextmenu">
+        <ElMenu defaultActive="-1" class="contextmenu">
           <ElMenuItem index={EContextMenuOperates.refresh}>
             <ElSvgIcon name="RefreshRight" />
             重新加载
@@ -57,6 +59,9 @@ export default defineComponent({
   .el-menu-item {
     height: 30px;
     line-height: 30px;
+    &.is-active {
+      color: initial;
+    }
   }
   .el-icon {
     margin-left: -4px;

@@ -1,0 +1,110 @@
+@import './common/variable';
+
+$light: 'light';
+$dark: 'dark';
+$purple: 'purple';
+$orange: 'orange';
+$pink: 'pink';
+$light-color: #fff;
+$purple-color: #639;
+$orange-color: #e0541d;
+$pink-color: #ce204f;
+
+$theme-list: (
+  $light $light-color,
+  $dark $color-dark-0,
+  $purple $purple-color,
+  $orange $orange-color,
+  $pink $pink-color
+);
+
+$font-color-list: (
+  menuTextColor '#ffffffb3',
+  menuActiveTextColor '#fff',
+  lightGray $color-light-gray
+);
+
+:export {
+  themeBackgroundColorList: $theme-list;
+  themeFontColorList: $font-color-list;
+}
+
+@mixin anticon($fontColor) {
+  :global {
+    .el-icon {
+      color: $fontColor;
+    }
+  }
+}
+
+@each $key, $bgColor, $fontColor in $theme-list {
+  $isLight: $key==$light;
+  $fontColor: if($isLight, rgba(0, 0, 0, 0.65), rgba(255, 255, 255, 0.65));
+  .theme_color_#{$key} {
+    color: $fontColor;
+    @include anticon($fontColor);
+  }
+  .theme_bgcolor_#{$key} {
+    background-color: $bgColor;
+    @include anticon($fontColor);
+  }
+
+  .theme_drawer_#{$key} {
+    :global {
+      .el-drawer {
+        background-color: $bgColor;
+      }
+      .el-drawer__header {
+        margin-bottom: 0;
+      }
+    }
+    @include anticon($fontColor);
+  }
+  .theme_sider_#{$key} {
+    > div {
+      background: $bgColor;
+    }
+  }
+  .theme_menu_#{$key} {
+    :global {
+      @if not $isLight {
+      }
+    }
+  }
+  .theme_breadcrumb_#{$key} {
+    a {
+      color: $fontColor;
+    }
+  }
+  .theme_dropdown_#{$key} {
+    &:global {
+      &.el-popper {
+        border-color: $bgColor;
+      }
+      &.el-dropdown__popper.el-popper .el-popper__arrow::before {
+        background: $bgColor;
+        border-color: $bgColor;
+      }
+    }
+    :global {
+      .el-dropdown-menu {
+        background: $bgColor;
+      }
+      .el-dropdown-menu__item {
+        color: $fontColor;
+      }
+    }
+  }
+  .theme_popover_#{$key} {
+    &:global {
+      &.el-popper {
+        background: $bgColor;
+        border-color: $bgColor;
+      }
+      &.el-popper .el-popper__arrow::before {
+        background: $bgColor;
+        border-color: $bgColor;
+      }
+    }
+  }
+}
