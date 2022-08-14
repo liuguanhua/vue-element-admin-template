@@ -1,13 +1,20 @@
 <script lang="tsx">
-import { defineComponent, VNodeProps, AllowedComponentProps, toRef } from 'vue'
+import {
+  defineComponent,
+  VNodeProps,
+  AllowedComponentProps,
+  toRef,
+  h,
+  Fragment,
+} from 'vue'
 import {
   ElDrawer,
   ElMenu,
   ElAside,
-  ElHeader,
   ElBreadcrumb,
   ElDropdown,
   ElPopover,
+  ElTabs,
 } from 'element-plus'
 import classNames from 'classnames'
 
@@ -25,25 +32,32 @@ export const BegetThemeContainer = defineComponent({
       type: Boolean,
       default: false,
     },
+    isWrapChild: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { slots }) {
-    const { showThemeColor, showThemeBgColor } = props
+    const { showThemeColor, showThemeBgColor, isWrapChild } = props
     const { theme } = useTheme()
     return () => {
       const children = slots.default && slots.default()
       const themeColor = styTheme[`theme_color_${theme.value}`]
       const themeBgColor = styTheme[`theme_bgcolor_${theme.value}`]
-      return (children || []).map((child) => {
-        child.props = {
-          ...child.props,
-          class: classNames({
-            [child.props?.class]: child.props?.class,
-            [themeColor]: showThemeColor && themeColor,
-            [themeBgColor]: showThemeBgColor && themeBgColor,
-          }),
-        }
-        return child
-      })
+      return h(
+        '',
+        (children || []).map((child) => {
+          child.props = {
+            ...child.props,
+            class: classNames({
+              [child.props?.class]: child.props?.class,
+              [themeColor]: showThemeColor && themeColor,
+              [themeBgColor]: showThemeBgColor && themeBgColor,
+            }),
+          }
+          return child
+        })
+      )
     }
   },
 })
@@ -192,7 +206,6 @@ export const BegetElPopover = defineComponent<TElPopoverProps>({
   setup(props, { slots }) {
     const { theme } = useTheme()
     const popperClass = toRef(props, 'popperClass')
-    console.log(`${styTheme[`theme_popover_${theme.value}`]}`)
     return () => {
       return (
         <ElPopover
@@ -207,6 +220,29 @@ export const BegetElPopover = defineComponent<TElPopoverProps>({
           }}
           v-slots={slots}
         ></ElPopover>
+      )
+    }
+  },
+})
+
+export type TElTabsProps = InstanceType<typeof ElTabs>['$props']
+
+export const BegetElTabs = defineComponent<TElTabsProps>({
+  props: ElTabs.props,
+  setup(props, { slots }) {
+    const { theme } = useTheme()
+    const className = toRef(props, 'class')
+    return () => {
+      return (
+        <ElTabs
+          {...(props as any)}
+          {...{
+            class: classNames(`${styTheme[`theme_tabs_${theme.value}`]}`, {
+              [className.value as string]: className.value,
+            }),
+          }}
+          v-slots={slots}
+        ></ElTabs>
       )
     }
   },

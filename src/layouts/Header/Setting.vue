@@ -1,8 +1,7 @@
 <script lang="tsx">
 import { defineComponent } from 'vue'
-import { ElDrawer } from 'element-plus'
-
-import { setStorage, WEB_CONFIG } from '@/scripts'
+import { ElDrawer, ElSwitch } from 'element-plus'
+import { storeToRefs } from 'pinia'
 
 import {
   ElSvgIcon,
@@ -10,13 +9,18 @@ import {
   BegetThemeContainer,
   TElDrawerProps,
 } from '@/components/common'
+
 import { useTheme, themeSkin } from '@/components/hooks'
+import { setStorage, WEB_CONFIG } from '@/scripts'
+import { useGlobalStore } from '@/store/modules/global'
 
 const themeKeys = Object.keys(themeSkin)
 
 export default defineComponent<TElDrawerProps>({
   props: ElDrawer.props,
-  setup(props, { attrs }) {
+  setup(props) {
+    const globalStore = useGlobalStore()
+    const { isFixedHeader, isFixedSidebar } = storeToRefs(globalStore)
     const { theme, switchTheme } = useTheme()
     const swapTheme = (status: string) => {
       switchTheme(status)
@@ -38,29 +42,38 @@ export default defineComponent<TElDrawerProps>({
           }}
           {...(props as any)}
         >
-          <h3>主题色</h3>
-          <ul class="theme_list" layout-align="space-between center">
-            {themeKeys.map((item) => {
-              const color = themeSkin[item]
-              const isActive = Object.is(theme.value, item)
-              return (
-                <li
-                  style={{
-                    backgroundColor: color,
-                  }}
-                  onClick={() => {
-                    swapTheme(item)
-                  }}
-                  class={{
-                    active: isActive,
-                  }}
-                  key={item}
-                >
-                  <ElSvgIcon class="theme-check" name="Check" />
-                </li>
-              )
-            })}
-          </ul>
+          <BegetThemeContainer showThemeColor>
+            <h3>主题色</h3>
+            <ul class="theme_list" layout-align="space-between center">
+              {themeKeys.map((item) => {
+                const color = themeSkin[item]
+                const isActive = Object.is(theme.value, item)
+                return (
+                  <li
+                    style={{
+                      backgroundColor: color,
+                    }}
+                    onClick={() => {
+                      swapTheme(item)
+                    }}
+                    class={{
+                      active: isActive,
+                    }}
+                    key={item}
+                  >
+                    <ElSvgIcon class="theme-check" name="Check" />
+                  </li>
+                )
+              })}
+            </ul>
+            <h3>页面设置</h3>
+            <ul>
+              <li layout-align="space-between center">
+                固定头部
+                <ElSwitch v-model={isFixedHeader.value} />
+              </li>
+            </ul>
+          </BegetThemeContainer>
         </BegetDrawer>
       )
     }

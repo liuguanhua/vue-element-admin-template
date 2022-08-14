@@ -1,4 +1,5 @@
 import store from 'store'
+
 import { WEB_CONFIG } from './constant'
 
 export function replaceState(oldState: Dictionary, newState: Dictionary) {

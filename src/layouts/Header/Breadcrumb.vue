@@ -4,10 +4,11 @@ import { ElBreadcrumbItem } from 'element-plus'
 import { compile } from 'path-to-regexp'
 import { useRoute, useRouter } from 'vue-router'
 
+import { BegetElBreadcrumb } from '@/components/common'
+
 import { TRouteRow, TRouteRowArray } from '@/types'
 import { DEFAULT_ROUTE } from '@/scripts/constant'
 import { useConfig } from '@/components/hooks'
-import { BegetElBreadcrumb } from '@/components/common'
 
 export default defineComponent({
   setup() {

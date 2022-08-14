@@ -1,14 +1,14 @@
 <script lang="tsx">
 import { defineComponent, computed } from 'vue'
-import { ElMenu, ElScrollbar } from 'element-plus'
+import { ElScrollbar } from 'element-plus'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
 import MenuItem from './MenuItem.vue'
+import { BegetElMenu } from '@/components/common'
 
 import { useGlobalStore } from '@/store/modules/global'
 import { useConfig } from '@/components/hooks'
-import { BegetElMenu } from '@/components/common'
 
 export default defineComponent({
   setup() {
@@ -86,10 +86,6 @@ $prefix: generateClsPrefix('layout-aside');
         }
       }
     }
-  }
-  &-popper {
-    max-height: 100%;
-    overflow: auto;
   }
 }
 </style>

@@ -25,10 +25,5 @@ function generateTheme(themeKey: string) {
   return {}
 }
 
-export const themeSkin: Dictionary = (() => {
-  return generateTheme('themeBackgroundColorList')
-})()
-
-export const themeColor: Dictionary = (() => {
-  return generateTheme('themeFontColorList')
-})()
+export const themeSkin: Dictionary = generateTheme('themeBackgroundColorList')
+export const themeColor: Dictionary = generateTheme('themeFontColorList')

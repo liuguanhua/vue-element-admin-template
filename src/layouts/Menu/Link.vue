@@ -19,7 +19,7 @@ export default defineComponent({
       const children = slots.default && slots.default()
       if (isExtraLink) {
         return (
-          <a target="_blank" rel="noopener" href={to}>
+          <a target="_blank" rel="noreferrer noopener" href={to}>
             {children}
           </a>
         )

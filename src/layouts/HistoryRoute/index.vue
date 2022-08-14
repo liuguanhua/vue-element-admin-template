@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElScrollbar, ElTabPane, ElTabs, TabsPaneContext } from 'element-plus'
 
 import TabsContextMenu from './TabsContextMenu.vue'
+import { ElSvgIcon } from '@/components/common'
 
 import { useConfig } from '@/components/hooks'
 import { TRouteRowArray } from '@/types'
@@ -18,16 +19,18 @@ import {
   HISTORY_ROUTE_KEY,
   isVaildArray,
 } from '@/scripts'
-import { ElSvgIcon } from '@/components/common'
 import { EContextMenuOperates } from '@/types/enum.d'
 
-const flatRoutesData = (routes: TRouteRowArray, basePath = '/') => {
+const ROOT_PATH = '/'
+
+const flatRoutesData = (routes: TRouteRowArray, basePath = ROOT_PATH) => {
   let affixRoutes: Dictionary[] = []
   let allRoutes: Dictionary[] = []
   routes.forEach((route) => {
     const newPath =
-      DEFAULT_ROUTE.path == route.path ? '/' + route.path : route.path
-    const routePath = (basePath == '/' ? '' : basePath + '/') + newPath //path.resolve(basePath, route.path)
+      DEFAULT_ROUTE.path == route.path ? ROOT_PATH + route.path : route.path
+    const routePath =
+      (basePath == ROOT_PATH ? '' : basePath + ROOT_PATH) + newPath //path.resolve(basePath, route.path)
     if (route.meta) {
       const info = {
         fullPath: routePath,

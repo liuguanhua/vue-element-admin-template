@@ -2,9 +2,9 @@
 import { defineComponent } from 'vue'
 import { ElMenu, ElMenuItem, ElDivider } from 'element-plus'
 
-import { EContextMenuOperates } from '@/types/enum.d'
-
 import { ElSvgIcon } from '@/components/common'
+
+import { EContextMenuOperates } from '@/types/enum.d'
 
 type Props = InstanceType<typeof ElMenu>['$props']
 

@@ -123,7 +123,6 @@ const MenuItem = defineComponent({
             ),
           }}
           index={lastResolvePath(route.path)}
-          popperAppendToBody
           popperClass={`${clsPrefix}-menu ${clsPrefix}-popper`}
         >
           {route?.children?.map((item) => (
@@ -141,3 +140,14 @@ const MenuItem = defineComponent({
 
 export default MenuItem
 </script>
+<style lang="scss">
+$prefix: generateClsPrefix('layout-aside');
+
+.#{$prefix} {
+  &-popper.el-popper {
+    max-height: 100%;
+    overflow: auto;
+    border: none;
+  }
+}
+</style>

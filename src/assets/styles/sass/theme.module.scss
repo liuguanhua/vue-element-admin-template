@@ -107,4 +107,13 @@ $font-color-list: (
       }
     }
   }
+
+  .theme_tabs_#{$key} {
+    :global {
+      color: $fontColor;
+      .el-tabs__item:not(.is-active) {
+        color: $fontColor;
+      }
+    }
+  }
 }

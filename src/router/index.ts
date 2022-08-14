@@ -12,6 +12,9 @@ const history = createWebHistory()
 const router = createRouter({
   history,
   routes,
+  scrollBehavior(to, from, saveScrollPosition) {
+    return { left: 0, top: 0 }
+  },
 })
 
 router.beforeEach((to, from, next) => {

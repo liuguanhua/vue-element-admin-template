@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent, onBeforeMount } from 'vue'
+import { defineComponent, Fragment, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({

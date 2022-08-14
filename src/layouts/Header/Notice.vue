@@ -2,6 +2,8 @@
 import { ElTabs } from 'element-plus'
 import { defineComponent, reactive } from 'vue'
 
+import { BegetElTabs } from '@/components/common'
+
 const { TabPane } = ElTabs
 
 export default defineComponent({
@@ -11,14 +13,14 @@ export default defineComponent({
     })
     return () => {
       return (
-        <ElTabs v-model={state.activeKey}>
+        <BegetElTabs class="tac" v-model={state.activeKey}>
           <TabPane key="0" label="消息">
-            通知1
+            消息内容
           </TabPane>
-          <TabPane key="0" label="代办">
-            消息
+          <TabPane key="1" label="代办">
+            代办内容
           </TabPane>
-        </ElTabs>
+        </BegetElTabs>
       )
     }
   },

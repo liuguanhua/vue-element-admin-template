@@ -1,13 +1,7 @@
 <script lang="tsx">
 import { defineComponent, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
-import {
-  ElHeader,
-  ElDropdownMenu,
-  ElDropdownItem,
-  ElBadge,
-  ElPopover,
-} from 'element-plus'
+import { ElHeader, ElDropdownMenu, ElDropdownItem, ElBadge } from 'element-plus'
 
 import Breadcrumb from './Breadcrumb.vue'
 import Setting from './Setting.vue'
@@ -171,7 +165,7 @@ $prefix: generateClsPrefix('layout-header');
 
 .#{$prefix} {
   height: 60px;
-  box-shadow: 0 0 10px #eee;
+  // box-shadow: 0 0 10px #eee;
 }
 
 .avatar {

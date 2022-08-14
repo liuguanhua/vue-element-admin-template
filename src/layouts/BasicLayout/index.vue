@@ -7,10 +7,10 @@ import { storeToRefs } from 'pinia'
 import Sidebar from '../Sidebar/index.vue'
 import Header from '../Header/index.vue'
 import HistoryRoute from '../HistoryRoute/index.vue'
+import { ThemeProvide } from '@/components/common'
 
 import { useGlobalStore } from '@/store/modules/global'
 import { useConfig } from '@/components/hooks'
-import { ThemeProvide } from '@/components/common'
 
 export default defineComponent({
   setup() {
@@ -27,7 +27,7 @@ export default defineComponent({
           <ThemeProvide>
             <Sidebar />
             <ElContainer>
-              {isFixedHeader.value && <div style={{ height: '101px' }}></div>}
+              {isFixedHeader.value && <div style={{ height: '100px' }}></div>}
               <div
                 class={[
                   clsPrefix,
@@ -38,7 +38,6 @@ export default defineComponent({
                     width: `calc(100% - ${width})`,
                   },
                 })}
-                style={{ height: '' }}
               >
                 <Header />
                 <HistoryRoute />
@@ -73,6 +72,7 @@ $prefix: generateClsPrefix('layout-header-view');
 .#{$prefix} {
   &-fixed {
     position: fixed;
+    z-index: 1;
   }
 }
 </style>

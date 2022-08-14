@@ -1,14 +1,13 @@
 <script lang="tsx">
 import { defineComponent } from 'vue'
-import { ElAside } from 'element-plus'
 import { RouterLink } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
 import Menu from '../Menu/index.vue'
+import { BegetElAside, BegetThemeContainer } from '@/components/common'
 
 import { useConfig } from '@/components/hooks'
 import { useGlobalStore } from '@/store/modules/global'
-import { BegetElAside, BegetThemeContainer } from '@/components/common'
 
 export default defineComponent({
   setup() {

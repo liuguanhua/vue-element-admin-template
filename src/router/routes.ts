@@ -15,7 +15,7 @@ const componentsRouter: TRouteRow = {
   children: [
     {
       path: 'tinymce',
-      // name: 'TinymceDemo',
+      name: 'TinymceDemo',
       redirect: '/components/tinymce/tinymce-2',
       meta: { title: 'Tinymce' },
       component: MainView,
@@ -27,12 +27,12 @@ const componentsRouter: TRouteRow = {
           meta: { title: 'Tinymce-2' },
           component: () => import('@/pages/dashboard/index.vue'),
         },
-        // {
-        //   path: 'tinymce-3',
-        //   name: 'TinymceDemo-3',
-        //   meta: { title: 'Tinymce-3', elIcon: 'Edit' },
-        //   component: () => import('@/pages/dashboard/index.vue'),
-        // },
+        {
+          path: 'tinymce-3',
+          name: 'TinymceDemo-3',
+          meta: { title: 'Tinymce-3', elIcon: 'Edit' },
+          component: () => import('@/pages/dashboard/index.vue'),
+        },
       ],
     },
     {
