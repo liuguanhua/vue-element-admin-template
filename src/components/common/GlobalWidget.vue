@@ -45,7 +45,7 @@ export const BegetThemeContainer = defineComponent({
       const themeColor = styTheme[`theme_color_${theme.value}`]
       const themeBgColor = styTheme[`theme_bgcolor_${theme.value}`]
       return h(
-        '',
+        isWrapChild ? 'div' : Fragment,
         (children || []).map((child) => {
           child.props = {
             ...child.props,
