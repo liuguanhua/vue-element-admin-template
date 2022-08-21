@@ -14,8 +14,8 @@ export default defineComponent({
     onClick: Function as PropType<(e: MouseEvent) => void>,
   },
   setup(props, { attrs }) {
-    const { name } = props
     return () => {
+      const { name } = props
       return (
         <ElIcon {...attrs} {...props}>
           {ElSvg[name]?.render()}

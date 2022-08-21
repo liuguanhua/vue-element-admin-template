@@ -66,3 +66,18 @@ img {
     box-shadow: 0 0 10px #fff, 0 0 5px #fff;
   }
 }
+
+$prefix: generateClsPrefix('layout-aside');
+
+.#{$prefix} {
+  &-popper {
+    &.el-popper {
+      max-height: 100%;
+      overflow: auto;
+      border: none;
+    }
+    .el-menu-item.is-active {
+      background-color: var(--color-primary-0);
+    }
+  }
+}

@@ -76,12 +76,14 @@ export function isVaildArray(value: any): boolean {
   return isArray(value) && Boolean(value.length)
 }
 
-export const replaceDoubleQuotes = (str: string = '') => str.replace(/"/g, '')
+export function replaceDoubleQuotes(str: string = '') {
+  return str.replace(/"/g, '')
+}
 
-export const setWebConfigStore = (value: Dictionary = {}) => {
+export function setWebConfigStore(value: Dictionary = {}) {
   return setStorage(WEB_CONFIG, value)
 }
 
-export const getWebConfigStore = () => {
+export function getWebConfigStore() {
   return getStorage(WEB_CONFIG)
 }

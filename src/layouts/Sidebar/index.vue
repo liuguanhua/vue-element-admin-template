@@ -11,16 +11,16 @@ import { useGlobalStore } from '@/store/modules/global'
 
 export default defineComponent({
   setup() {
-    const globalState = useGlobalStore()
+    const globalStore = useGlobalStore()
     const { logo, clsPrefix, title, menuSideWidth, menuSideFoldWidth } =
       useConfig('layout-aside')
-    const { isFixedSidebar, collapse } = storeToRefs(globalState)
+    const { isFixedSidebar, collapse, isMobile } = storeToRefs(globalStore)
 
     return () => {
       const width = collapse.value ? menuSideFoldWidth : menuSideWidth
       return (
         <>
-          {isFixedSidebar.value && (
+          {isFixedSidebar.value && !isMobile.value && (
             <div layout-flex="none" style={{ width }}></div>
           )}
           <BegetElAside
@@ -28,10 +28,16 @@ export default defineComponent({
               { [`${clsPrefix}-fixed`]: isFixedSidebar.value },
               clsPrefix,
               {
-                [`${clsPrefix}-fold`]: collapse.value,
+                [`${clsPrefix}-fold`]: collapse.value && !isMobile.value,
               },
             ]}
-            width={width}
+            width={isMobile.value ? menuSideWidth : width}
+            style={{
+              display:
+                (isMobile.value && collapse.value) || !isMobile.value
+                  ? 'block'
+                  : 'none',
+            }}
           >
             <RouterLink class={`${clsPrefix}-title block`} to="/">
               <BegetThemeContainer showThemeBgColor showThemeColor>
@@ -61,7 +67,7 @@ $prefix: generateClsPrefix('layout-aside');
   &-fixed {
     position: fixed;
     height: 100%;
-    z-index: 1;
+    z-index: 2;
   }
   &-logo {
     width: 40px;
@@ -82,6 +88,9 @@ $prefix: generateClsPrefix('layout-aside');
       }
       .is-active .el-sub-menu__title {
         background-color: var(--color-primary-0) !important;
+        .el-icon {
+          color: var(--color-white);
+        }
       }
     }
   }

@@ -34,15 +34,15 @@ export default defineComponent<TElDrawerProps>({
           v-slots={{
             header: () => {
               return (
-                <BegetThemeContainer showThemeColor>
-                  <span>设置</span>
+                <BegetThemeContainer tag="span" showThemeColor>
+                  设置
                 </BegetThemeContainer>
               )
             },
           }}
           {...(props as any)}
         >
-          <BegetThemeContainer showThemeColor>
+          <BegetThemeContainer tag showThemeColor>
             <h3>主题色</h3>
             <ul class="theme_list" layout-align="space-between center">
               {themeKeys.map((item) => {
@@ -71,6 +71,10 @@ export default defineComponent<TElDrawerProps>({
               <li layout-align="space-between center">
                 固定头部
                 <ElSwitch v-model={isFixedHeader.value} />
+              </li>
+              <li layout-align="space-between center">
+                固定侧边菜单
+                <ElSwitch v-model={isFixedSidebar.value} />
               </li>
             </ul>
           </BegetThemeContainer>

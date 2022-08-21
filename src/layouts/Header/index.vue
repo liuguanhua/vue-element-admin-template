@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { ElHeader, ElDropdownMenu, ElDropdownItem, ElBadge } from 'element-plus'
 
@@ -14,10 +14,10 @@ import {
 } from '@/components/common'
 import Notice from './Notice.vue'
 
-import { useConfig } from '@/components/hooks'
+import { useConfig, useWindowResize } from '@/components/hooks'
 import { useGlobalStore } from '@/store/modules/global'
 import { useUserStore } from '@/store/modules/user'
-import { setWebConfigStore } from '@/scripts'
+import { DEVICE_WIDTH, setWebConfigStore } from '@/scripts'
 
 export default defineComponent({
   setup() {
@@ -25,13 +25,14 @@ export default defineComponent({
       visible: false,
     })
     const { clsPrefix, title, link } = useConfig('layout-header')
-    const globalState = useGlobalStore()
+    const winSize = useWindowResize()
+    const globalStore = useGlobalStore()
     const userState = useUserStore()
-    const { collapse } = storeToRefs(globalState)
+    const { collapse, isMobile } = storeToRefs(globalStore)
     const { name, avatar } = storeToRefs(userState)
 
     const toggleCollapsed = () => {
-      globalState.$patch((state) => {
+      globalStore.$patch((state) => {
         state.collapse = !collapse.value
         setWebConfigStore({
           collapse: state.collapse,
@@ -42,6 +43,18 @@ export default defineComponent({
     const onSettings = () => {
       state.visible = true
     }
+
+    watch(winSize, () => {
+      if (winSize.width <= DEVICE_WIDTH && !isMobile.value) {
+        globalStore.$patch((state) => {
+          state.isMobile = true
+        })
+      } else if (isMobile.value) {
+        globalStore.$patch((state) => {
+          state.isMobile = false
+        })
+      }
+    })
 
     return () => {
       return (
@@ -58,7 +71,7 @@ export default defineComponent({
                     class="color-dark-0 hover-color-primary-0 font-size-24 cursign vam"
                   ></ElSvgIcon>
                 </span>
-                <Breadcrumb />
+                <Breadcrumb v-show={!isMobile.value} />
               </div>
               <div layout-align="start center">
                 <a
@@ -66,6 +79,7 @@ export default defineComponent({
                   target="_blank"
                   rel="noreferrer noopener"
                   href={link}
+                  v-show={!isMobile.value}
                 >
                   <SvgIcon
                     class="color-dark-0 hover-color-primary-0 font-size-22 vam"
@@ -126,21 +140,19 @@ export default defineComponent({
                   }}
                 >
                   <span class="cursign">
-                    <BegetThemeContainer showThemeColor>
-                      <span>
-                        <ElSvgIcon
-                          name="UserFilled"
-                          class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 vam"
-                        ></ElSvgIcon>
-                        <span class="ellipsis inline-block vam m-l-14">
-                          {name.value}
-                        </span>
-                        <img
-                          class="avatar bdr-half vam m-l-14"
-                          src={avatar.value}
-                          alt={name.value}
-                        />
+                    <BegetThemeContainer tag="span" showThemeColor>
+                      <ElSvgIcon
+                        name="UserFilled"
+                        class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 vam"
+                      ></ElSvgIcon>
+                      <span class="ellipsis inline-block vam m-l-14">
+                        {name.value}
                       </span>
+                      <img
+                        class="avatar bdr-half vam m-l-14"
+                        src={avatar.value}
+                        alt={name.value}
+                      />
                     </BegetThemeContainer>
                   </span>
                 </BegetElDropdown>

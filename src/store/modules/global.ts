@@ -16,6 +16,7 @@ export const useGlobalStore = defineStore('global', {
       isFixedHeader: takeConfigField('isFixedHeader'),
       routes: [] as TRouteRowArray,
       cacheViews: [] as string[],
+      isMobile: false,
     }
   },
   actions: {

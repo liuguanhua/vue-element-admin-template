@@ -21,6 +21,7 @@ import classNames from 'classnames'
 import { themeColor, themeSkin, useTheme } from '../hooks'
 
 import styTheme from '@/assets/styles/sass/theme.module.scss'
+import { isBoolean } from '@/scripts/utils'
 
 export const BegetThemeContainer = defineComponent({
   props: {
@@ -32,27 +33,33 @@ export const BegetThemeContainer = defineComponent({
       type: Boolean,
       default: false,
     },
-    isWrapChild: {
-      type: Boolean,
+    tag: {
+      type: [Boolean, String],
       default: false,
     },
   },
   setup(props, { slots }) {
-    const { showThemeColor, showThemeBgColor, isWrapChild } = props
+    const { showThemeColor, showThemeBgColor, tag } = props
     const { theme } = useTheme()
     return () => {
       const children = slots.default && slots.default()
       const themeColor = styTheme[`theme_color_${theme.value}`]
       const themeBgColor = styTheme[`theme_bgcolor_${theme.value}`]
+      const themeClass = {
+        [themeColor]: showThemeColor && themeColor,
+        [themeBgColor]: showThemeBgColor && themeBgColor,
+      }
       return h(
-        isWrapChild ? 'div' : Fragment,
+        tag ? isBoolean(tag) ? 'div' : tag : <Fragment></Fragment>,
+        {
+          ...(tag && { class: themeClass }),
+        },
         (children || []).map((child) => {
           child.props = {
             ...child.props,
             class: classNames({
               [child.props?.class]: child.props?.class,
-              [themeColor]: showThemeColor && themeColor,
-              [themeBgColor]: showThemeBgColor && themeBgColor,
+              ...(!tag && themeClass),
             }),
           }
           return child

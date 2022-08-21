@@ -108,8 +108,8 @@ export default defineComponent({
     const { clsPrefix } = useConfig('layout-history-view')
     const route = useRoute()
     const router = useRouter()
-    const globalState = useGlobalStore()
-    const { routes } = storeToRefs(globalState)
+    const globalStore = useGlobalStore()
+    const { routes } = storeToRefs(globalStore)
     const refScrollbar = ref<Dictionary>({})
     const state = reactive<{
       historyData: Dictionary[]
@@ -307,7 +307,7 @@ export default defineComponent({
           }
           return result
         }, []) as string[]
-        globalState.$patch({
+        globalStore.$patch({
           cacheViews,
         })
         await nextTick()

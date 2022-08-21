@@ -40,8 +40,8 @@ const MenuItem = defineComponent({
   },
   setup(props) {
     const { clsPrefix } = useConfig('layout-aside')
-    const globalState = useGlobalStore()
-    const { collapse } = storeToRefs(globalState)
+    const globalStore = useGlobalStore()
+    const { collapse } = storeToRefs(globalStore)
     const { route, basePath: fromBasePath, level } = props
     const basePath = fromBasePath || route.path
     const onlyOneChild = ref<Dictionary>({})
@@ -140,14 +140,3 @@ const MenuItem = defineComponent({
 
 export default MenuItem
 </script>
-<style lang="scss">
-$prefix: generateClsPrefix('layout-aside');
-
-.#{$prefix} {
-  &-popper.el-popper {
-    max-height: 100%;
-    overflow: auto;
-    border: none;
-  }
-}
-</style>

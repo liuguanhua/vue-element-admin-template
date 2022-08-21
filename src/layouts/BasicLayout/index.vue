@@ -17,9 +17,11 @@ export default defineComponent({
     const { clsPrefix, menuSideFoldWidth, menuSideWidth } =
       useConfig('layout-header-view')
     const globalStore = useGlobalStore()
-    const { cacheViews, isFixedHeader, collapse } = storeToRefs(globalStore)
+    const { cacheViews, isFixedHeader, collapse, isMobile } =
+      storeToRefs(globalStore)
     const route = useRoute()
     const key = computed(() => route.fullPath)
+
     return () => {
       const width = collapse.value ? menuSideFoldWidth : menuSideWidth
       return (
@@ -33,11 +35,12 @@ export default defineComponent({
                   clsPrefix,
                   { [`${clsPrefix}-fixed`]: isFixedHeader.value },
                 ]}
-                {...(isFixedHeader.value && {
-                  style: {
-                    width: `calc(100% - ${width})`,
-                  },
-                })}
+                {...(isFixedHeader.value &&
+                  !isMobile.value && {
+                    style: {
+                      width: `calc(100% - ${width})`,
+                    },
+                  })}
               >
                 <Header />
                 <HistoryRoute />
@@ -73,6 +76,7 @@ $prefix: generateClsPrefix('layout-header-view');
   &-fixed {
     position: fixed;
     z-index: 1;
+    width: 100%;
   }
 }
 </style>

@@ -13,9 +13,9 @@ import { useConfig } from '@/components/hooks'
 export default defineComponent({
   setup() {
     const route = useRoute()
-    const globalState = useGlobalStore()
+    const globalStore = useGlobalStore()
     const { clsPrefix, sideLogoHeight } = useConfig('layout-aside')
-    const { routes, collapse } = storeToRefs(globalState)
+    const { routes, collapse, isMobile } = storeToRefs(globalStore)
 
     const activeMenu = computed(() => {
       const { meta, path } = route
@@ -35,7 +35,7 @@ export default defineComponent({
         >
           <BegetElMenu
             defaultActive={activeMenu.value}
-            collapse={collapse.value}
+            collapse={isMobile.value ? false : collapse.value}
             collapseTransition={false}
           >
             {routes.value.map((route) => (

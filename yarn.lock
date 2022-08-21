@@ -568,10 +568,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web-bluetooth@npm:^0.0.14":
-  version: 0.0.14
-  resolution: "@types/web-bluetooth@npm:0.0.14"
-  checksum: 1eb694ff2ba6ef239e10024bfb205c087fb1a43aa8b4a31f3a3b7c90eccf2f55c7fb4c1057e382e1c2f4d6d8a137e68bf1255790b980c5ac95026419a623c6b5
+"@types/web-bluetooth@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "@types/web-bluetooth@npm:0.0.15"
+  checksum: 4e3b3b1c0baf6735690ce0c5ffaac53de3dbd16362316cbc5e32970bcb1e1baf16dae0a9f30fe86256ad0ee22a4533423f443835273efc54b15235086ebda85b
   languageName: node
   linkType: hard
 
@@ -868,47 +868,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vueuse/core@npm:^8.7.5":
-  version: 8.7.5
-  resolution: "@vueuse/core@npm:8.7.5"
+"@vueuse/core@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "@vueuse/core@npm:9.1.0"
   dependencies:
-    "@types/web-bluetooth": ^0.0.14
-    "@vueuse/metadata": 8.7.5
-    "@vueuse/shared": 8.7.5
+    "@types/web-bluetooth": ^0.0.15
+    "@vueuse/metadata": 9.1.0
+    "@vueuse/shared": 9.1.0
     vue-demi: "*"
-  peerDependencies:
-    "@vue/composition-api": ^1.1.0
-    vue: ^2.6.0 || ^3.2.0
-  peerDependenciesMeta:
-    "@vue/composition-api":
-      optional: true
-    vue:
-      optional: true
-  checksum: a92c6cd6c59060b1690326c42b251741f68f0cfff96fb3c932cb857be67b27994736e135630a0855a5d547ef7c54a2675423fdf200b496710a171a8abaebf612
+  checksum: 41a7d3a247ef007908028804923767c20bef7417491a762420a2f4a3da8f7a14da80f5126afaf545fddfa5c77e75cd96c966c884fd4627d8c8a082caecc21386
   languageName: node
   linkType: hard
 
-"@vueuse/metadata@npm:8.7.5":
-  version: 8.7.5
-  resolution: "@vueuse/metadata@npm:8.7.5"
-  checksum: 02d7ae472eaad115a147d8bdbf6f0afeba56ced2cfa40e981333498593a7cef92debb2dddc83ea154b81201b0f8de9c7b38ac3034ccb29a3edfd4a4c4c0960c1
+"@vueuse/metadata@npm:9.1.0":
+  version: 9.1.0
+  resolution: "@vueuse/metadata@npm:9.1.0"
+  checksum: 128657916aaed7b2a011ed60a1213254ef49ed9b486e61925afdc16da887091e3c55803ee1a2a3beff0180a4acca8fba80bb862fc17b14b3ae5f9c61fed246d3
   languageName: node
   linkType: hard
 
-"@vueuse/shared@npm:8.7.5":
-  version: 8.7.5
-  resolution: "@vueuse/shared@npm:8.7.5"
+"@vueuse/shared@npm:9.1.0":
+  version: 9.1.0
+  resolution: "@vueuse/shared@npm:9.1.0"
   dependencies:
     vue-demi: "*"
-  peerDependencies:
-    "@vue/composition-api": ^1.1.0
-    vue: ^2.6.0 || ^3.2.0
-  peerDependenciesMeta:
-    "@vue/composition-api":
-      optional: true
-    vue:
-      optional: true
-  checksum: 475147a8de209332edd7a520fea0d7076cf1b275a5757aeffb9c6d4e9ecd2e7943b953f803cc30dac55776122f82091063ba089d09b9a48726c7b692f33efb72
+  checksum: 18aae2c37b1cfabc97f53c16300d5daf072a7a9d8a0ae98a77d14022ead47e33053307838d3d43100ec234b4cf8d5430a7e8be011869fd5eecac2a6dca7a1453
   languageName: node
   linkType: hard
 
@@ -1690,9 +1674,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"element-plus@npm:^2.2.8":
-  version: 2.2.8
-  resolution: "element-plus@npm:2.2.8"
+"element-plus@npm:^2.2.14":
+  version: 2.2.14
+  resolution: "element-plus@npm:2.2.14"
   dependencies:
     "@ctrl/tinycolor": ^3.4.1
     "@element-plus/icons-vue": ^2.0.6
@@ -1700,7 +1684,7 @@ __metadata:
     "@popperjs/core": "npm:@sxzz/popperjs-es@^2.11.7"
     "@types/lodash": ^4.14.182
     "@types/lodash-es": ^4.17.6
-    "@vueuse/core": ^8.7.5
+    "@vueuse/core": ^9.1.0
     async-validator: ^4.2.5
     dayjs: ^1.11.3
     escape-html: ^1.0.3
@@ -1708,10 +1692,10 @@ __metadata:
     lodash-es: ^4.17.21
     lodash-unified: ^1.0.2
     memoize-one: ^6.0.0
-    normalize-wheel-es: ^1.1.2
+    normalize-wheel-es: ^1.2.0
   peerDependencies:
     vue: ^3.2.0
-  checksum: 6d8d99fabe7a1bc04fedbea03d55f789f85c6745bb31149590687ef466a5b2937776542a0ea770173ce89eb1399dcddd38a3161bcd78b621163698a043e1d06c
+  checksum: 4651cf735afb2c43126eee634271eda5f9aac8e2f22037d6be35b5dc0f78ecd19478161c2fe7b7f350f654b42bcbf06254e93c89ee0a97538a7b3451a5a9aa36
   languageName: node
   linkType: hard
 
@@ -3283,10 +3267,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"normalize-wheel-es@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "normalize-wheel-es@npm:1.1.2"
-  checksum: 4efe21260119c11173d481f59e3c674665cb74a62065da56853ad61e013e25d79e021367eb2735a1fdb33989675111a900ba23e2561fd51faa35436a3d15c26a
+"normalize-wheel-es@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "normalize-wheel-es@npm:1.2.0"
+  checksum: 59595255ea5a74b1cf69c83e986da995434a82012cbe1d1fcc53fc01ff9c2b347a6733eee9bafe5f713a14c2a19e5d04485ccb591a5106bb3dcc199bf7ab4aef
   languageName: node
   linkType: hard
 
@@ -4264,6 +4248,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"throttle-debounce@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "throttle-debounce@npm:5.0.0"
+  checksum: aa8bf25828b4f8645ce863589de05d6807ea3debc147ce7d89624638ff8a16792d6d0baa0f8a32a260f0b163444d74020c6087b713ae561fde594b97b6e51f28
+  languageName: node
+  linkType: hard
+
 "to-fast-properties@npm:^2.0.0":
   version: 2.0.0
   resolution: "to-fast-properties@npm:2.0.0"
@@ -4659,7 +4650,7 @@ __metadata:
     "@vitejs/plugin-vue": ^2.2.0
     "@vitejs/plugin-vue-jsx": ^1.3.8
     classnames: ^2.3.1
-    element-plus: ^2.2.8
+    element-plus: ^2.2.14
     fast-glob: ^3.2.11
     normalize.css: ^8.0.1
     nprogress: ^0.2.0
@@ -4669,6 +4660,7 @@ __metadata:
     sass: ^1.49.9
     sass-loader: ^12.6.0
     store: ^2.0.12
+    throttle-debounce: ^5.0.0
     typescript: ^4.5.4
     vite: ^2.8.0
     vite-plugin-svg-icons: ^2.0.1

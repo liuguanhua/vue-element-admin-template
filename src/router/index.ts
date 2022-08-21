@@ -19,8 +19,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  const globalState = useGlobalStore()
-  globalState.$patch((state) => {
+  const globalStore = useGlobalStore()
+  globalStore.$patch((state) => {
     state.routes = routes
   })
   next()
