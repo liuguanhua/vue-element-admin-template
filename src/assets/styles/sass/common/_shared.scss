@@ -81,3 +81,9 @@ $prefix: generateClsPrefix('layout-aside');
     }
   }
 }
+
+.reset-drawer-padding {
+  .el-drawer__body {
+    padding: 0;
+  }
+}

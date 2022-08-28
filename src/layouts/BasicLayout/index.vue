@@ -7,7 +7,8 @@ import { storeToRefs } from 'pinia'
 import Sidebar from '../Sidebar/index.vue'
 import Header from '../Header/index.vue'
 import HistoryRoute from '../HistoryRoute/index.vue'
-import { ThemeProvide } from '@/components/common'
+import Setting from '../Header/Setting.vue'
+import { BegetDrawer, ThemeProvide } from '@/components/common'
 
 import { useGlobalStore } from '@/store/modules/global'
 import { useConfig } from '@/components/hooks'
@@ -17,17 +18,41 @@ export default defineComponent({
     const { clsPrefix, menuSideFoldWidth, menuSideWidth } =
       useConfig('layout-header-view')
     const globalStore = useGlobalStore()
-    const { cacheViews, isFixedHeader, collapse, isMobile } =
+    const { cacheViews, isFixedHeader, collapse, isMobile, isOpenSetting } =
       storeToRefs(globalStore)
     const route = useRoute()
     const key = computed(() => route.fullPath)
+    const onClose = () => {
+      globalStore.$patch((state) => {
+        state.collapse = true
+      })
+    }
+
+    const onCloseSetting = () => {
+      globalStore.$patch((state) => {
+        state.isOpenSetting = false
+      })
+    }
 
     return () => {
       const width = collapse.value ? menuSideFoldWidth : menuSideWidth
       return (
         <ElContainer class="min-h-100">
           <ThemeProvide>
-            <Sidebar />
+            {isMobile.value ? (
+              <BegetDrawer
+                customClass="reset-drawer-padding"
+                withHeader={false}
+                direction="ltr"
+                modelValue={!collapse.value}
+                onClose={onClose}
+                size={menuSideWidth}
+              >
+                <Sidebar />
+              </BegetDrawer>
+            ) : (
+              <Sidebar />
+            )}
             <ElContainer>
               {isFixedHeader.value && <div style={{ height: '100px' }}></div>}
               <div
@@ -62,6 +87,11 @@ export default defineComponent({
               </ElMain>
               <ElFooter></ElFooter>
             </ElContainer>
+            <Setting
+              modelValue={isOpenSetting.value}
+              size={256}
+              onClose={onCloseSetting}
+            />
           </ThemeProvide>
         </ElContainer>
       )

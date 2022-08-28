@@ -33,10 +33,7 @@ export default defineComponent({
             ]}
             width={isMobile.value ? menuSideWidth : width}
             style={{
-              display:
-                (isMobile.value && collapse.value) || !isMobile.value
-                  ? 'block'
-                  : 'none',
+              display: !collapse.value || !isMobile.value ? 'block' : 'none',
             }}
           >
             <RouterLink class={`${clsPrefix}-title block`} to="/">
