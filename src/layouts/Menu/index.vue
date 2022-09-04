@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, watch } from 'vue'
 import { ElScrollbar } from 'element-plus'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
@@ -24,6 +24,17 @@ export default defineComponent({
       }
       return path
     })
+
+    watch(
+      () => route.path,
+      () => {
+        if (isMobile.value && !collapse.value) {
+          globalStore.$patch((state) => {
+            state.collapse = true
+          })
+        }
+      }
+    )
 
     return () => {
       return (
