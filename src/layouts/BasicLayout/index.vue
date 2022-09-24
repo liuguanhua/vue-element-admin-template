@@ -103,6 +103,7 @@ export default defineComponent({
 $prefix: generateClsPrefix('layout-header-view');
 
 .#{$prefix} {
+  transition: width 0.2s;
   &-fixed {
     position: fixed;
     z-index: 1;

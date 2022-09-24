@@ -1,7 +1,7 @@
 import { BasicLayout as Layout, MainView } from '@/layouts'
 
 import { DEFAULT_ROUTE } from '@/scripts/constant'
-import { TRouteRow, TRouteRowArray } from '@/types'
+import { TRouteRowArray } from '@/types'
 
 const routes: TRouteRowArray = [
   {
@@ -24,33 +24,45 @@ const routes: TRouteRowArray = [
         component: () => import('@/pages/dashboard/index.vue'),
         ...DEFAULT_ROUTE,
       },
+    ],
+  },
+  {
+    path: '/user',
+    component: MainView,
+    redirect: '/user/login',
+    children: [
       {
-        path: '/table',
-        component: MainView,
-        redirect: '/table/list',
-        name: 'Table',
-        meta: {
-          title: 'Table',
-          elIcon: 'Grid',
-        },
-        children: [
-          {
-            path: 'list',
-            component: () => import('@/pages/dashboard/index.vue'),
-            name: 'TableList',
-            meta: { title: 'Table' },
-          },
-        ],
-      },
-      {
-        //ref:https://router.vuejs.org/guide/migration/#removed-star-or-catch-all-routes
-        // path: '/:w+',
-        path: '/:pathMatch(.*)',
-        name: 'notFound',
-        component: () => import('@/pages/notFound/index.vue'),
+        path: 'login',
+        name: 'Login',
+        component: () => import('@/pages/login/index.vue'),
         hidden: true,
+        meta: { title: '登录', },
       },
     ],
+  },
+  {
+    path: '/table',
+    component: Layout,
+    redirect: '/table/list',
+    name: 'Table',
+    alwaysShow: true,
+    meta: { title: '表格', elIcon: 'Grid', },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/pages/table/index.vue'),
+        name: 'TableList',
+        meta: { title: '基础表格' },
+      },
+    ],
+  },
+  {
+    //ref:https://router.vuejs.org/guide/migration/#removed-star-or-catch-all-routes
+    // path: '/:w+',
+    path: '/:pathMatch(.*)',
+    name: 'notFound',
+    component: () => import('@/pages/notFound/index.vue'),
+    hidden: true,
   },
 ]
 export default routes

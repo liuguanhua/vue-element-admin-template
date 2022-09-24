@@ -53,6 +53,9 @@ $padding-cls: '.p';
 .m-auto {
   margin: auto;
 }
+.m-b-0 {
+  margin-bottom: 0;
+}
 
 // 字体位置、大小、细粗
 @include each-content($text-align-list) using ($key, $value) {
@@ -106,7 +109,7 @@ $padding-cls: '.p';
 .vam {
   vertical-align: middle;
 }
-.vat{
+.vat {
   vertical-align: top;
 }
 .bdr-half {

@@ -5,7 +5,8 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 import routes from './routes'
-import { useGlobalStore } from '@/store/modules/global'
+import { useUserStore } from '@/store/modules/user'
+import { LOGIN_PATH } from '@/scripts'
 
 const history = createWebHistory()
 
@@ -19,13 +20,26 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  const globalStore = useGlobalStore()
-  globalStore.$patch((state) => {
-    state.routes = routes
-  })
-  next()
-  NProgress.done()
+  const userStore = useUserStore()
+  const { userInfo } = userStore
+  if (to.path == LOGIN_PATH) {
+    userInfo.userId ? next('/') : next()
+  } else {
+    if (userInfo.userId) {
+      return next()
+    }
+    if (from.path === LOGIN_PATH) {
+      NProgress.done(true);
+      next(false);
+    } else {
+      next(LOGIN_PATH)
+    }
+  }
 })
+
+router.afterEach(() => {
+  NProgress.done();
+});
 
 export default function setupRouter(app: App<Element>) {
   app.use(router)

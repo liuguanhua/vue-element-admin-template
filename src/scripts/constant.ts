@@ -4,6 +4,8 @@ export const DEFAULT_ROUTE = {
   meta: { title: '首页', elIcon: 'HomeFilled', affix: true },
 }
 
+export const LOGIN_PATH = '/user/login'
+
 export const HISTORY_ROUTE_KEY = 'HISTORY_ROUTE_KEY'
 
 export const WEB_CONFIG = 'WEB_CONFIG'

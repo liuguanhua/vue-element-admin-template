@@ -1,6 +1,7 @@
 import store from 'store'
 
-import { WEB_CONFIG } from './constant'
+import { LOGIN_PATH, WEB_CONFIG } from './constant'
+import equalPaths from './equalPaths'
 
 export function replaceState(oldState: Dictionary, newState: Dictionary) {
   const result = Object.assign({}, oldState, newState)
@@ -86,4 +87,19 @@ export function setWebConfigStore(value: Dictionary = {}) {
 
 export function getWebConfigStore() {
   return getStorage(WEB_CONFIG)
+}
+
+export const redirectLogin = () => {
+  if (!equalPaths.isLogin) {
+    const time = 1000
+    console.log('正在跳转...')
+    setTimeout(() => {
+      window.location.href = LOGIN_PATH
+    }, time)
+  }
+}
+
+export function clearLoginStore() {
+  store.clearAll()
+  redirectLogin()
 }

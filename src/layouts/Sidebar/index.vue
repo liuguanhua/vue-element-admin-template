@@ -21,7 +21,11 @@ export default defineComponent({
       return (
         <>
           {isFixedSidebar.value && !isMobile.value && (
-            <div layout-flex="none" style={{ width }}></div>
+            <div
+              class={`${clsPrefix}-placeholder`}
+              layout-flex="none"
+              style={{ width }}
+            ></div>
           )}
           <BegetElAside
             class={[
@@ -56,8 +60,10 @@ export default defineComponent({
 $prefix: generateClsPrefix('layout-aside');
 
 .#{$prefix} {
-  // background-color: var(--color-dark-0);
   transition: width 0.2s;
+  &-placeholder {
+    transition: width 0.2s;
+  }
   &-title > div {
     height: $sideLogoHeight;
   }

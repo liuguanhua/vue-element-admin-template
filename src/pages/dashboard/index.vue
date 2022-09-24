@@ -1,10 +1,15 @@
 <script lang="tsx">
-import { defineComponent } from "vue";
+import { defineComponent,onMounted } from "vue";
 import { RouterLink } from "vue-router";
+
+import { dashboard } from '@/scripts/apis';
 
 export default defineComponent({
   name: "App",
   setup() {
+    onMounted(()=>{
+     dashboard.getData()
+    })
     return () => {
       return (
         <div style="height:1000px">
