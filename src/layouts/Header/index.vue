@@ -1,7 +1,13 @@
 <script lang="tsx">
 import { defineComponent, reactive, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { ElHeader, ElDropdownMenu, ElDropdownItem, ElBadge } from 'element-plus'
+import {
+  ElHeader,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElBadge,
+  ElMessageBox,
+} from 'element-plus'
 
 import Breadcrumb from './Breadcrumb.vue'
 import {
@@ -16,7 +22,11 @@ import Notice from './Notice.vue'
 import { useConfig, useWindowResize } from '@/components/hooks'
 import { useGlobalStore } from '@/store/modules/global'
 import { useUserStore } from '@/store/modules/user'
-import { DEVICE_WIDTH, setWebConfigStore } from '@/scripts'
+import { clearLoginStore, DEVICE_WIDTH, setWebConfigStore } from '@/scripts'
+
+enum ECommandMenu {
+  logout,
+}
 
 export default defineComponent({
   setup() {
@@ -28,7 +38,7 @@ export default defineComponent({
     const globalStore = useGlobalStore()
     const userState = useUserStore()
     const { collapse, isMobile } = storeToRefs(globalStore)
-    const { name, avatar } = storeToRefs(userState)
+    const { userInfo, avatar } = storeToRefs(userState)
 
     const toggleCollapsed = () => {
       globalStore.$patch((state) => {
@@ -63,6 +73,37 @@ export default defineComponent({
         })
       }
     )
+
+    const onCommand = (command) => {
+      if (command === ECommandMenu.logout) {
+        ElMessageBox.confirm('确认退出登录?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true
+              instance.confirmButtonText = 'Loading...'
+              userState
+                .logout()
+                .then(() => {
+                  done()
+                })
+                .finally(() => {
+                  instance.confirmButtonText = '确定'
+                  instance.confirmButtonLoading = false
+                })
+            } else {
+              done()
+            }
+          },
+        })
+          .then(() => {
+            clearLoginStore()
+          })
+          .catch(() => {})
+      }
+    }
 
     return () => {
       return (
@@ -122,6 +163,7 @@ export default defineComponent({
                 <Notice />
               </BegetElPopover>
               <BegetElDropdown
+                onCommand={onCommand}
                 popperOptions={{
                   modifiers: [
                     {
@@ -136,8 +178,12 @@ export default defineComponent({
                   dropdown: () => {
                     return (
                       <ElDropdownMenu>
-                        <ElDropdownItem>你好 - {name.value}</ElDropdownItem>
-                        <ElDropdownItem>退出登录</ElDropdownItem>
+                        <ElDropdownItem>
+                          你好 - {userInfo.value.userName}
+                        </ElDropdownItem>
+                        <ElDropdownItem command={ECommandMenu.logout}>
+                          退出登录
+                        </ElDropdownItem>
                       </ElDropdownMenu>
                     )
                   },
@@ -150,12 +196,12 @@ export default defineComponent({
                       class="color-dark-0 hover-color-primary-0 font-size-22 vam m-l-14 vam"
                     ></ElSvgIcon>
                     <span class="ellipsis inline-block vam m-l-14">
-                      {name.value}
+                      {userInfo.value.userName}
                     </span>
                     <img
                       class="avatar bdr-half vam m-l-14"
                       src={avatar.value}
-                      alt={name.value}
+                      alt={userInfo.value.userName}
                     />
                   </BegetThemeContainer>
                 </span>

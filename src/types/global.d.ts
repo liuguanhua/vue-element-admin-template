@@ -22,3 +22,10 @@ declare interface IRequestType<DP = Dictionary> {
   success?: (result: any) => void
   error?: (result: any) => void
 }
+
+
+declare interface Window {
+  APP_CONFIG: {
+    apiRoot: string
+  }
+}

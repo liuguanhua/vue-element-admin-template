@@ -85,12 +85,7 @@ export const BegetDrawer = defineComponent<TElDrawerProps>({
     return () => {
       return (
         <div class={`${styTheme[`theme_drawer_${theme.value}`]}`}>
-          <ElDrawer
-            modelValue={false}
-            {...(props as any)}
-            {...attrs}
-            v-slots={slots}
-          ></ElDrawer>
+          <ElDrawer {...(props as any)} {...attrs} v-slots={slots}></ElDrawer>
         </div>
       )
     }

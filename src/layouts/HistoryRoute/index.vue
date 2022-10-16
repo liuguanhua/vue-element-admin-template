@@ -341,8 +341,8 @@ export default defineComponent({
             <ElTabs
               v-model={state.activeKey}
               type="card"
-              // onTab-remove={onTabRemove}
-              onTab-click={onTabClick}
+              // onTabRemove={onTabRemove}
+              onTabClick={onTabClick}
               stretch={false}
             >
               {state.historyData.map((item) => {
@@ -353,7 +353,7 @@ export default defineComponent({
                       label: () => {
                         return (
                           <span
-                            onContextmenu={openMenu(item)}
+                            on-contextmenu={openMenu(item)}
                             class="inline-block vat h-100"
                           >
                             <span>{meta.title}</span>
@@ -423,12 +423,14 @@ $prefix: generateClsPrefix('layout-history-view');
       margin-bottom: 0;
     }
     .el-tabs--card > .el-tabs__header {
+      background-color: var(--color-white);
       .el-tabs__nav {
         transform: none !important;
+        border-top: 0;
       }
       .el-tabs__item {
         border-bottom: 1px solid var(--el-border-color-light);
-        background-color: var(--color-light-gray);
+        background-color: var(--color-white);
         padding: 0;
         > span {
           padding: 0 20px;
@@ -439,13 +441,16 @@ $prefix: generateClsPrefix('layout-history-view');
       }
       .el-tabs__item.is-active {
         border-bottom-color: var(--color-light-gray);
+        background-color: var(--color-light-gray);
       }
       .is-icon-close svg {
         margin-top: 0;
       }
     }
-    .el-tabs__item.is-active {
-      color: var(--color-primary-0);
+    .el-tabs__item {
+      &.is-active {
+        color: var(--color-primary-0);
+      }
     }
     .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
       border-bottom-color: var(--color-light-gray);

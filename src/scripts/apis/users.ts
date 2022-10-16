@@ -1,6 +1,6 @@
 import request from "../request"
 
-export const verifyUserLogin = () => {
+export const verifyIsLogin = () => {
   return request('users/verifyIsLogin', {
     commonTips: false
   })
@@ -11,5 +11,11 @@ export const goLogin = (data: object) => {
     method: 'post',
     data,
     errTips: true
+  })
+}
+
+export const goLogout = () => {
+  return request('users/logout/account', {
+    method: 'post',
   })
 }

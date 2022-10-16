@@ -1,5 +1,5 @@
 <script lang="tsx">
-import path from 'path'
+import path from 'path-browserify'
 import { defineComponent, ref, PropType } from 'vue'
 import { ElSubMenu, ElMenuItem } from 'element-plus'
 import { storeToRefs } from 'pinia'

@@ -48,12 +48,12 @@ const routes: TRouteRowArray = [
     alwaysShow: true,
     meta: { title: '表格', elIcon: 'Grid', },
     children: [
-      {
-        path: 'list',
+      ...[...Array(20).keys()].map((item) => ({
+        path: `list${item}`,
         component: () => import('@/pages/table/index.vue'),
-        name: 'TableList',
-        meta: { title: '基础表格' },
-      },
+        name: `TableList${item}`,
+        meta: { title: `基础表格${item}`, },
+      }))
     ],
   },
   {

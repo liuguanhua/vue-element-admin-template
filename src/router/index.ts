@@ -18,10 +18,16 @@ const router = createRouter({
   },
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   NProgress.start()
   const userStore = useUserStore()
-  const { userInfo } = userStore
+  let userInfo = userStore.userInfo
+  if (!userInfo.userId && (!to.query.redirect || !to.path)) {//防止重定向后再次请求
+    try {
+      userInfo = await userStore.verifyIsLogin()
+    } catch (error) {
+    }
+  }
   if (to.path == LOGIN_PATH) {
     userInfo.userId ? next('/') : next()
   } else {
@@ -32,7 +38,12 @@ router.beforeEach((to, from, next) => {
       NProgress.done(true);
       next(false);
     } else {
-      next(LOGIN_PATH)
+      next({
+        path: LOGIN_PATH,
+        query: {
+          redirect: to.fullPath
+        }
+      })
     }
   }
 })

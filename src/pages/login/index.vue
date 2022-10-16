@@ -1,6 +1,6 @@
 <script lang="tsx">
-import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { defineComponent, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElButton, ElForm, ElFormItem, ElInput, ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 
@@ -27,7 +27,7 @@ export default defineComponent({
       if (!formEl.value) return
       formEl.value.validate((valid) => {
         if (valid) {
-          userStore.login(ruleForm).then((res) => {
+          userStore.login(ruleForm).then(() => {
             ElMessage({
               type: 'success',
               message: '登录成功',
@@ -35,7 +35,6 @@ export default defineComponent({
             router.push('/')
           })
         } else {
-          console.log('error submit!')
           return false
         }
       })
@@ -51,7 +50,6 @@ export default defineComponent({
             <img class={`${clsPrefix}-logo`} src={logo} alt={title} />
             <h3 class="text-uppercase m-l-12 ellipsis r-m-p">{title}</h3>
           </div>
-          <RouterLink to="/">home</RouterLink>
           <ElForm
             ref={ruleFormRef}
             model={ruleForm}
@@ -60,11 +58,11 @@ export default defineComponent({
             label-width="49px"
           >
             <ElFormItem label="账号" prop="userName">
-              <ElInput modelValue={ruleForm.userName} autocomplete="off" />
+              <ElInput v-model={ruleForm.userName} autocomplete="off" />
             </ElFormItem>
             <ElFormItem label="密码" prop="password">
               <ElInput
-                modelValue={ruleForm.password}
+                v-model={ruleForm.password}
                 type="password"
                 autocomplete="off"
               />

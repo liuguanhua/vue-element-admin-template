@@ -1,8 +1,6 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import config from '@/config';
 
-const { API_ROOT } = config
 import { clearLoginStore } from './utils'
 
 const CancelToken = axios.CancelToken
@@ -15,14 +13,13 @@ const captureException = (err, callback: (res) => void) => {
   err = (err || {}) as Dictionary
   const { response, request: req } = err
   if (response) {
+    const { status } = response
     if (!response.data && err.message) {
-      return ElMessage({
+      ElMessage({
         type: 'error',
         message: err.message
       })
-    }
-    const { status } = response
-    if (status >= 500) {
+    } else if (status >= 500) {
       ElMessage({
         type: 'error',
         message: '服务器出错⊙﹏⊙'
@@ -77,7 +74,7 @@ const request = (url: string, opts?: IRequestType) => {
   return new Promise<any>((resolve, reject) => {
     axios({
       cancelToken: source.token,
-      url: customApi ? url : `${API_ROOT}api/${url}`,
+      url: customApi ? url : `${window.APP_CONFIG.apiRoot}api/${url}`,
       method,
       params,
       data
@@ -97,6 +94,8 @@ const request = (url: string, opts?: IRequestType) => {
             message: msg
           })
           if (Object.is(code, 401)) {
+            error && error(serveInfo)
+            reject(serveInfo)
             return clearLoginStore()
           }
         }

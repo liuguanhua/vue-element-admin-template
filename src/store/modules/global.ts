@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 import { DEVICE_WIDTH, getWebConfigStore, isBoolean } from '@/scripts'
-import routes from '@/router/routes'
+import { TRouteRowArray } from '@/types'
 
 function takeConfigField(key: string, defaultValue: boolean = true) {
   const webConfig = getWebConfigStore()
@@ -15,10 +15,9 @@ export const useGlobalStore = defineStore('global', {
       isFixedSidebar: takeConfigField('isFixedSidebar'),
       isFixedHeader: takeConfigField('isFixedHeader'),
       isOpenSetting: false,
-      routes,
+      routes:[] as TRouteRowArray,
       cacheViews: [] as string[],
       isMobile: window.innerWidth <= DEVICE_WIDTH,
-      // drawerMenuVisible: false,
     }
   },
   actions: {

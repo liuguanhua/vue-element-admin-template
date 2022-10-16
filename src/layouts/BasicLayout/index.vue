@@ -88,7 +88,7 @@ export default defineComponent({
               <ElFooter></ElFooter>
             </ElContainer>
             <Setting
-              modelValue={isOpenSetting.value}
+              v-model={isOpenSetting.value}
               size={256}
               onClose={onCloseSetting}
             />

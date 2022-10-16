@@ -91,11 +91,7 @@ export function getWebConfigStore() {
 
 export const redirectLogin = () => {
   if (!equalPaths.isLogin) {
-    const time = 1000
-    console.log('正在跳转...')
-    setTimeout(() => {
-      window.location.href = LOGIN_PATH
-    }, time)
+    window.location.href = `${LOGIN_PATH}?redirect=${window.location.href}`
   }
 }
 
