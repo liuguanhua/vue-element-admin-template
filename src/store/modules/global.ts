@@ -14,8 +14,9 @@ export const useGlobalStore = defineStore('global', {
       collapse: takeConfigField('collapse', false),
       isFixedSidebar: takeConfigField('isFixedSidebar'),
       isFixedHeader: takeConfigField('isFixedHeader'),
+      isOpenFastNav: takeConfigField('isOpenFastNav'),
       isOpenSetting: false,
-      routes:[] as TRouteRowArray,
+      routes: [] as TRouteRowArray,
       cacheViews: [] as string[],
       isMobile: window.innerWidth <= DEVICE_WIDTH,
     }

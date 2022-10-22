@@ -24,6 +24,11 @@ declare interface IRequestType<DP = Dictionary> {
 }
 
 
+declare interface IPaginationOptions {
+  pageIndex?: number
+  pageSize?: number
+}
+
 declare interface Window {
   APP_CONFIG: {
     apiRoot: string

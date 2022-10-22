@@ -48,7 +48,7 @@ const routes: TRouteRowArray = [
     alwaysShow: true,
     meta: { title: '表格', elIcon: 'Grid', },
     children: [
-      ...[...Array(20).keys()].map((item) => ({
+      ...[...Array(21).keys()].slice(1).map((item) => ({
         path: `list${item}`,
         component: () => import('@/pages/table/index.vue'),
         name: `TableList${item}`,

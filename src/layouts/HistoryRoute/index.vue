@@ -402,13 +402,16 @@ export default defineComponent({
 $prefix: generateClsPrefix('layout-history-view');
 
 .#{$prefix} {
+  // box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+  border-bottom: 1px solid var(--el-border-color-light);
+  height: 40px;
   :deep() {
     .el-tabs__nav-prev,
     .el-tabs__nav-next {
       display: none;
     }
     .el-scrollbar__wrap {
-      padding-bottom: 10px;
+      // padding-bottom: 10px;
     }
     .el-tabs__nav-wrap,
     .el-tabs__nav-scroll,
@@ -424,9 +427,10 @@ $prefix: generateClsPrefix('layout-history-view');
     }
     .el-tabs--card > .el-tabs__header {
       background-color: var(--color-white);
+      border-bottom: 0;
       .el-tabs__nav {
         transform: none !important;
-        border-top: 0;
+        // border-top: 0;
       }
       .el-tabs__item {
         border-bottom: 1px solid var(--el-border-color-light);
@@ -440,7 +444,7 @@ $prefix: generateClsPrefix('layout-history-view');
         }
       }
       .el-tabs__item.is-active {
-        border-bottom-color: var(--color-light-gray);
+        // border-bottom-color: var(--color-light-gray);
         background-color: var(--color-light-gray);
       }
       .is-icon-close svg {
@@ -453,7 +457,7 @@ $prefix: generateClsPrefix('layout-history-view');
       }
     }
     .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
-      border-bottom-color: var(--color-light-gray);
+      // border-bottom-color: var(--color-light-gray);
     }
   }
 }

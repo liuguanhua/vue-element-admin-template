@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent } from 'vue'
+import { defineComponent, watch } from 'vue'
 import { ElDrawer, ElSwitch } from 'element-plus'
 import { storeToRefs } from 'pinia'
 
@@ -20,7 +20,8 @@ export default defineComponent<TElDrawerProps>({
   props: ElDrawer.props,
   setup(props) {
     const globalStore = useGlobalStore()
-    const { isFixedHeader, isFixedSidebar } = storeToRefs(globalStore)
+    const { isFixedHeader, isFixedSidebar, isOpenFastNav } =
+      storeToRefs(globalStore)
     const { theme, switchTheme } = useTheme()
     const swapTheme = (status: string) => {
       switchTheme(status)
@@ -28,6 +29,18 @@ export default defineComponent<TElDrawerProps>({
         theme: status,
       })
     }
+
+    watch(
+      () => ({
+        isFixedHeader: isFixedHeader.value,
+        isFixedSidebar: isFixedSidebar.value,
+        isOpenFastNav: isOpenFastNav.value,
+      }),
+      (info) => {
+        setStorage(WEB_CONFIG, info)
+      }
+    )
+
     return () => {
       return (
         <BegetDrawer
@@ -75,6 +88,10 @@ export default defineComponent<TElDrawerProps>({
               <li layout-align="space-between center">
                 固定侧边菜单
                 <ElSwitch v-model={isFixedSidebar.value} />
+              </li>
+              <li layout-align="space-between center">
+                开启快捷导航
+                <ElSwitch v-model={isOpenFastNav.value} />
               </li>
             </ul>
           </BegetThemeContainer>

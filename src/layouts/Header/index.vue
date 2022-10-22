@@ -30,10 +30,7 @@ enum ECommandMenu {
 
 export default defineComponent({
   setup() {
-    const state = reactive({
-      visible: false,
-    })
-    const { clsPrefix, title, link } = useConfig('layout-header')
+    const { clsPrefix, title, projectLink } = useConfig('layout-header')
     const winSize = useWindowResize()
     const globalStore = useGlobalStore()
     const userState = useUserStore()
@@ -123,7 +120,7 @@ export default defineComponent({
                 title={title}
                 target="_blank"
                 rel="noreferrer noopener"
-                href={link}
+                href={projectLink}
                 v-show={!isMobile.value}
               >
                 <SvgIcon

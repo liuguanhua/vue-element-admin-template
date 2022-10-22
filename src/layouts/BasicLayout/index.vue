@@ -18,8 +18,14 @@ export default defineComponent({
     const { clsPrefix, menuSideFoldWidth, menuSideWidth } =
       useConfig('layout-header-view')
     const globalStore = useGlobalStore()
-    const { cacheViews, isFixedHeader, collapse, isMobile, isOpenSetting } =
-      storeToRefs(globalStore)
+    const {
+      cacheViews,
+      isFixedHeader,
+      isOpenFastNav,
+      collapse,
+      isMobile,
+      isOpenSetting,
+    } = storeToRefs(globalStore)
     const route = useRoute()
     const key = computed(() => route.fullPath)
     const onClose = () => {
@@ -54,7 +60,11 @@ export default defineComponent({
               <Sidebar />
             )}
             <ElContainer>
-              {isFixedHeader.value && <div style={{ height: '100px' }}></div>}
+              {isFixedHeader.value && (
+                <div
+                  style={{ height: `${isOpenFastNav.value ? 100 : 60}px` }}
+                ></div>
+              )}
               <div
                 class={[
                   clsPrefix,
@@ -68,7 +78,7 @@ export default defineComponent({
                   })}
               >
                 <Header />
-                <HistoryRoute />
+                {isOpenFastNav.value && <HistoryRoute />}
               </div>
               <ElMain>
                 <RouterView>
@@ -106,7 +116,7 @@ $prefix: generateClsPrefix('layout-header-view');
   transition: width 0.2s;
   &-fixed {
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     width: 100%;
   }
 }
