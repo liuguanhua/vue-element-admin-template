@@ -253,7 +253,9 @@ export default defineComponent({
           })
           break
         case EContextMenuOperates.close:
-          onTabRemove(state.curHistory.path)
+          if (!state.curHistory.meta?.affix) {
+            onTabRemove(state.curHistory.path)
+          }
           break
         case EContextMenuOperates.other:
           router.push(state.curHistory)
@@ -353,7 +355,7 @@ export default defineComponent({
                       label: () => {
                         return (
                           <span
-                            on-contextmenu={openMenu(item)}
+                            onContextmenu={openMenu(item)}
                             class="inline-block vat h-100"
                           >
                             <span>{meta.title}</span>

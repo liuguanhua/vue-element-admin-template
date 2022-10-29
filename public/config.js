@@ -1,6 +1,11 @@
 window.APP_CONFIG = (function () {
+  /**apiRoot
+   * 1、配置'/'，则使用vite.config.ts中配置的代理 默认
+   * 2、为空不配置则使用模拟数据
+   * 3、自定义接口地址
+   */
   return {
-    apiRoot: 'http://localhost:9999/',//接口地址，不配置则走模拟数据
+    apiRoot: '/',
     title: 'vue admin',
     logo: '/static/logo.png',
     projectLink: 'https://github.com/liuguanhua/vue-element-admin-template',

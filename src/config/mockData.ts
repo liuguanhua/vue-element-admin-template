@@ -1,4 +1,4 @@
-import { getStorage, HISTORY_ROUTE_KEY } from "@/scripts"
+import { getStorage, HISTORY_ROUTE_KEY, setStorage } from "@/scripts"
 
 
 const MOCK_USER_INFO = {
@@ -8,8 +8,11 @@ const MOCK_USER_INFO = {
 }
 
 export default function (url) {
+  if (url == 'users/login/account') {//为验证登录加个标识
+    setStorage(HISTORY_ROUTE_KEY, {})
+  }
   return {
-    'users/verifyIsLogin': getStorage(HISTORY_ROUTE_KEY) ? MOCK_USER_INFO : {},
+    'users/verifyIsLogin': getStorage(HISTORY_ROUTE_KEY, false) ? MOCK_USER_INFO : {},
 
     'users/login/account': MOCK_USER_INFO,
 

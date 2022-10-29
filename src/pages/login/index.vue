@@ -1,6 +1,6 @@
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ElButton, ElForm, ElFormItem, ElInput, ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 
@@ -12,6 +12,7 @@ export default defineComponent({
     const { clsPrefix, logo, title } = useConfig('login')
     const userStore = useUserStore()
     const router = useRouter()
+    const route = useRoute()
     const ruleFormRef = ref<FormInstance>()
     const ruleForm = reactive({
       userName: 'admin',
@@ -32,7 +33,11 @@ export default defineComponent({
               type: 'success',
               message: '登录成功',
             })
-            router.push('/')
+            if (route.query.redirect) {
+              window.location.href = route.query.redirect as string
+            } else {
+              router.push('/')
+            }
           })
         } else {
           return false

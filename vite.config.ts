@@ -7,6 +7,8 @@ const { resolve } = path
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  //build部署后报错 https://blog.csdn.net/xingorg/article/details/120537203
+  base: '/',
   plugins: [
     vue(),
     vueJsx(),
@@ -41,5 +43,13 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     open: true,
+    port: 3000,
+    proxy: {
+      "/api": {
+        target: "http://react-admin.lgh930.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\//, ""),
+      },
+    },
   },
 })
