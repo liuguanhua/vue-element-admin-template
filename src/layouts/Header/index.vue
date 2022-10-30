@@ -216,7 +216,9 @@ $prefix: generateClsPrefix('layout-header');
 
 .#{$prefix} {
   height: 60px;
-  // box-shadow: 0 0 10px #eee;
+  box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+  position: relative;
+  z-index: 3;
 }
 
 .avatar {

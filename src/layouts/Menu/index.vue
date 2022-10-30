@@ -100,3 +100,19 @@ $prefix: generateClsPrefix('layout-aside');
   }
 }
 </style>
+<style lang="scss">
+$prefix: generateClsPrefix('layout-aside');
+
+.#{$prefix} {
+  &-menu {
+    &.#{$prefix}-popper {
+      .el-menu-item {
+        &:hover {
+          background-color: var(--color-primary-1);
+          color: var(--color-white);
+        }
+      }
+    }
+  }
+}
+</style>

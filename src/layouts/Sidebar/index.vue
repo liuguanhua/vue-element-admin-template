@@ -70,7 +70,7 @@ $prefix: generateClsPrefix('layout-aside');
   &-fixed {
     position: fixed;
     height: 100%;
-    z-index: 2;
+    z-index: 11;
   }
   &-logo {
     width: 40px;
