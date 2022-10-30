@@ -211,18 +211,18 @@ export default defineComponent({
       const { allRoutes, affixRoutes } = flatRoutesData(routes.value)
       if (!storeHistoryRoute || !isVaildArray(storeHistoryRoute.historyData)) {
         state.historyData = affixRoutes
-        addRoute()
       } else {
         state.historyData = matchStoreRoutes(
           storeHistoryRoute.historyData,
           allRoutes
         )
-        state.activeKey = state.historyData.some(
-          (item) => item.path == storeHistoryRoute.activeKey
-        )
-          ? storeHistoryRoute.activeKey
-          : `/${DEFAULT_ROUTE.path}`
+        // state.activeKey = state.historyData.some(
+        //   (item) => item.path == storeHistoryRoute.activeKey
+        // )
+        //   ? storeHistoryRoute.activeKey
+        //   : `/${DEFAULT_ROUTE.path}`
       }
+      addRoute()
     }
 
     const openMenu = (routeItem: Dictionary) => {
@@ -404,7 +404,7 @@ export default defineComponent({
 $prefix: generateClsPrefix('layout-history-view');
 
 .#{$prefix} {
-  // box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+  box-shadow: 0 0 10px rgb(0 0 0 / 10%);
   border-bottom: 1px solid var(--el-border-color-light);
   height: 40px;
   :deep() {
